@@ -6,6 +6,10 @@ function App() {
   return (
     <div className="">
       <Graph />
+
+      <button>
+          
+      </button>
     </div>
   );
 }
