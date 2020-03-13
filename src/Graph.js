@@ -1,4 +1,4 @@
-
+import 'bootstrap/dist/css/bootstrap.min.css';
 import React from "react";
 import {  Scatter, Line } from 'react-chartjs-2';
 //import PropTypes from 'prop-types'

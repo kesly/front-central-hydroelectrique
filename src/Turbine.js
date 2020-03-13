@@ -1,5 +1,6 @@
 import React from 'react'
 import Graph from './Graph'
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 class Turbine extends React.Component {
 
@@ -11,8 +12,8 @@ class Turbine extends React.Component {
         }
     }
 
-    deleteTurbine = () => {
-
+    onDelete= index=> {
+        this.props.deleteTurbine(index);
     }
 
 
@@ -30,7 +31,7 @@ class Turbine extends React.Component {
                         <Graph entries={this} />
                     </span>
                 </div>
-                <button className="accordion" onClick={this.props.onDelete}>
+                <button className="accordion" onClick={()=>this.props.onDelete(this.state.id)}>
                     Delete Turbine
                 </button>
             </div>

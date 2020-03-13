@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { fetchCatalog } from './CatalogActions';
 import  Accordion  from './Accordion';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 class Hydraulics extends React.Component {
 
@@ -12,7 +13,7 @@ class Hydraulics extends React.Component {
         size: 0,
         name: 'Groupe 0',
         accordions: [],
-    }
+    };
 }
 
 
@@ -30,11 +31,11 @@ handleClickAccordion(index){
     });
 }
 
-renderAccordion(index){
+renderAccordion(index, name){
     return (
         <div className="main-Hydraulics">
             <Accordion
-                name={this.state.name}
+                name={name}
                 index={index}
                 key={index}
             />
@@ -46,21 +47,31 @@ renderAccordion(index){
 
 
 addAccordion(){
-    let size = this.state.size;
-    const accordions = this.state.accordions.slice();
-    accordions.push(this.renderAccordion(size));
-
+    //let size = this.state.size;
+    const accordions = Object.assign([], this.state.accordions);
+    accordions.push({
+      id: this.state.size,
+      name: this.state.name
+    });
+    console.log(accordions);
     this.setState({
         accordions: accordions,
-        size: (size+1),
+        size: (this.state.size+1),
     });
 }
 
 
+handleDeleteAccordions = index =>{
+  const accordions = this.state.accordions.filter(accordion => accordion.id!==index);
+  
+  this.setState({
+      accordions: accordions,
+  });
+}
 
 render() {
 
-  const { catalog, error, loading } = this.props;
+  /*const { catalog, error, loading } = this.props;
 
     if (error) {
       return <div>Error! {error.message}</div>;
@@ -70,7 +81,7 @@ render() {
       return <div>Loading...</div>;
     }
 
-   /* return (
+    return (
       <div>
         <h2>Centrales</h2>
         {
@@ -89,10 +100,27 @@ render() {
       </div>
     )*/
     return (
+     
         <div className="main-Hydraulics">
             
-            {this.state.accordions}
-            <button className='add-hydrolyc' onClick={() => this.addAccordion()}>Add Accordion</button>
+            <div>
+            {
+              this.state.accordions.map((accordion) => (
+                
+                  <Accordion
+                    name={accordion.name}
+                    index={accordion.id}
+                    key={accordion.id}
+                    onDelete={this.handleDeleteAccordions}
+                  />
+                
+              )
+                
+              ) 
+            }
+            </div>
+            
+            <button variant="secondary" className='btn' onClick={() => this.addAccordion()}>ADD HYDRAULIC</button>
         </div>
     );
 }

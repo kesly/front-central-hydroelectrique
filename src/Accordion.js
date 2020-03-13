@@ -1,20 +1,21 @@
 import React from 'react'
-import PropType from 'prop-type'
 import Turbine from './Turbine'
-import Graph from './Graph'
 import './Accordion.css'
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 class Accordion extends React.Component {
 
     constructor(props) {
         super(props);
+        console.log('++++++++++++++++++++++++++++' + props.index);
         this.state = {
             folded : false,
             name: props.name,
             id: props.index,
             size: 0,
             turbineList: [],
-        }
+        };
+        
     }
 
     renderTurbine(index){
@@ -26,19 +27,18 @@ class Accordion extends React.Component {
                     name={this.state.name}
                     index={index}
                     key={index}
-                    onDelete={() => this.deleteTurbine(index)}
+                    onDelete={this.deleteTurbine}
                 />
             </div>
         );
     }
 
-    deleteTurbine(index){
-        const turbineList = this.state.turbineList;
-
-        turbineList.filter(function(value, index, arr){ return index != turbineList.index});
-
-        console.log('Index : '+index);
-        console.log('list Turbine : ' + turbineList);
+    deleteTurbine = (index) => {
+        
+        const turbineList = this.state.turbineList.filter(turbine => turbine.id!==index);
+        if(this.state.size === 0){
+            this.props.onDelete(this.state.id);
+        }
         this.setState({
             turbineList: turbineList,
         });
@@ -46,9 +46,13 @@ class Accordion extends React.Component {
 
     addTurbine(){
         let size = this.state.size;
-        const turbineList = this.state.turbineList.slice();
-        //console.log(this.state.size);
-        turbineList.push(this.renderTurbine(size));
+        const turbineList = this.state.turbineList;
+        
+        turbineList.push({
+            id: this.state.size,
+            name: this.state.name,
+            attribute: {x: 'hauteur', y: 'debit'}
+        });
 
         this.setState({
             turbineList: turbineList,
@@ -65,16 +69,36 @@ class Accordion extends React.Component {
     render() {
         console.log(this.state.turbineList);
         return (
-            <div className="mainAccordion" key={this.state.id}>
-                <h3>Group {this.state.id}</h3> 
-                <div className="graphe">
-                    <span className="grapheContainer">
-                        {this.state.turbineList}
-                    </span>
-                </div>
-                <button className='add-hydrolyc' onClick={() => this.addTurbine()}>Add Turbine</button>
-                
+            <div className="accordion" id="accordionExample">
+        <div className="card">
+          <div className="card-header" id="headingOne">
+            <h2 className="mb-0">
+              <button onClick={() => this.clicAccordion()} className="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                Group {this.state.id}
+              </button>
+            </h2>
+          </div>
+          <div id="collapseOne" className="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+            <div className="card-body">
+                { this.state.folded &&
+                    this.state.turbineList.map(turbine => (
+                        <Turbine
+                            name={turbine.name}
+                            index={turbine.id}
+                            key={turbine.id}
+                            onDelete={this.deleteTurbine}
+                        />
+                    ))
+                }
             </div>
+          </div>
+        </div>
+        <button className='add-hydrolyc' onClick={() => this.addTurbine()}>Add Turbine</button>
+        <button className='add-hydrolyc' onClick={() => this.props.onDelete(this.state.id)}>Delete Turbine</button>
+      </div>
+        
+
+           
         )
     };
 };
