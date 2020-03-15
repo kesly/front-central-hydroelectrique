@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { addGraph, delHydraulic, delTurbine } from './Stores/DataFetcherActions';
 import { fetchData } from './Stores/DataActions';
 import PropTypes from 'prop-types'
+import Configuration from "./Configuration";
 
 class Graph extends React.Component{
 
@@ -89,7 +90,7 @@ class Graph extends React.Component{
         super(props);
         // add new graph
         this.addGraph(this.props.data, this.props.dataFetcher, this.props.hydraulicID, this.props.turbineID,  this.props.attribute);
-
+        //Configuration.exportConfiration();
         this.state= {
 
             options: this.configOptions(),
