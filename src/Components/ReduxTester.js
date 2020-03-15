@@ -1,24 +1,20 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { addGraph, delGraph } from '../Stores/DataFetcherActions';
+import { addGraph, delGraph } from '../Stores/GraphActions';
 import { fetchData } from '../Stores/DataActions';
 
 class ReduxTester extends React.Component {
 
-  addGraph = (data, dataFetcher, hydraulicID, turbineID, attribute1, attribute2 = null) => {
-    this.props.dispatch(addGraph(data, dataFetcher, hydraulicID, turbineID, attribute1, attribute2));
+  addGraph = (graphs, data, dataFetcher, hydraulicID, turbineID, attribute1, attribute2 = null) => {
+    this.props.dispatch(addGraph(graphs, data, dataFetcher, hydraulicID, turbineID, attribute1, attribute2));
   }
 
-  delGraph = (dataFetcher, hydraulicID, turbineID, attribute1, attribute2 = null) => {
-    this.props.dispatch(delGraph(dataFetcher, hydraulicID, turbineID, attribute1, attribute2));
-  }
-
-  fetchData = (hydraulicID, turbineID, attribute, lastData) => {
-    this.props.dispatch(fetchData(hydraulicID, turbineID, attribute, lastData));
+  delGraph = (graphs, dataFetcher, hydraulicID, turbineID, attribute1, attribute2 = null) => {
+    this.props.dispatch(delGraph(graphs, dataFetcher, hydraulicID, turbineID, attribute1, attribute2));
   }
 
   render() {
-    const { data, dataFetcher } = this.props;
+    const { graphs, data, dataFetcher } = this.props;
 
     return (
       <div>
@@ -52,10 +48,10 @@ class ReduxTester extends React.Component {
           })
         }
         <span>Create a graph for Avignon Groupe1</span>
-        <button onClick={ () => this.addGraph(data, dataFetcher, "Avignon", "Groupe1", "power", "high") }>Create Graph</button>
+        <button onClick={ () => this.addGraph(graphs, data, dataFetcher, "Avignon", "Groupe1", "power", "high") }>Create Graph</button>
         <p></p>
         <span>Delete Avignon Groupe1's graph</span>
-        <button onClick={ () => this.delGraph(dataFetcher, "Avignon", "Groupe1", "power", "high") }>Delete Graph</button>
+        <button onClick={ () => this.delGraph(graphs, dataFetcher, "Avignon", "Groupe1", "power", "high") }>Delete Graph</button>
       </div>
     )
   }
@@ -64,7 +60,8 @@ class ReduxTester extends React.Component {
 
 const mapStateToProps = (state) => ({
   data: state.data,
-  dataFetcher: state.dataFetcher
+  dataFetcher: state.dataFetcher,
+  graphs: state.graphs
 });
 
 export default connect(mapStateToProps)(ReduxTester);

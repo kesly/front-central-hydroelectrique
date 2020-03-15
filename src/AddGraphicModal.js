@@ -6,10 +6,10 @@ const HYDRAULICS = ["France", "Guinée", "Norvège", "Suisse"];
 
 class AddGraphicModal extends React.Component {
 
-    
+
     constructor(props){
         super(props);
-        
+
         this.state = {
             show: this.props.show,
             sizeCheck: 0,
@@ -26,30 +26,30 @@ class AddGraphicModal extends React.Component {
 
     createTurbinesItems(){
       let items = [];
-      console.log(this.state.hydraulic);
+
       if(this.state.hydraulic!== ''){
         this.props.hydraulicsID[this.state.hydraulic].map((turbineList) => (
           items.push(<option value={turbineList}>{turbineList}</option>)
         ))
-      }  
-      
+      }
+
       return items;
     }
-      
+
       createHydraulicItems = () => {
-        console.log(this.props);
-        let items = [];   
+
+        let items = [];
         Object.keys(this.props.hydraulicsID).map((hydraulic) => (
             items.push(<option value={hydraulic}>{hydraulic}</option>)
-        ))      
-        console.log(items);
+        ))
+
         return items;
       }
 
     handleChangeHydraulic = (event) => {
 
         this.setState({
-            hydraulic: event.target.value 
+            hydraulic: event.target.value
         })
     }
 
@@ -58,7 +58,7 @@ class AddGraphicModal extends React.Component {
             turbine: event.target.value
         })
     }
-    
+
     handleChangeHeight = (event) => {
         if(this.state.sizeCheck<2 || this.state.height){
             this.setState({
@@ -69,7 +69,7 @@ class AddGraphicModal extends React.Component {
                 sizeCheck: this.state.height ? (this.state.sizeCheck-1) : (this.state.sizeCheck+1),
             })
         }
-        
+
     }
 
     handleChangePosition = (event) => {
@@ -82,7 +82,7 @@ class AddGraphicModal extends React.Component {
                 sizeCheck: this.state.position ? (this.state.sizeCheck-1) : (this.state.sizeCheck+1),
             })
         }
-        
+
     }
 
     handleChangeEnergie = (event) => {
@@ -95,7 +95,7 @@ class AddGraphicModal extends React.Component {
                 sizeCheck: this.state.energie ? (this.state.sizeCheck-1) : (this.state.sizeCheck+1),
             })
         }
-        
+
     }
 
     handleChangeDebit = (event) => {
@@ -112,11 +112,11 @@ class AddGraphicModal extends React.Component {
             debit:  this.refs.debit.checked
         })
     }
-    
+
     handleShow = () => {
         this.setState({ show: true });
     }
-      
+
     cancel = () => {
         this.setState({ show: false });
         this.props.onClose();
@@ -160,11 +160,11 @@ class AddGraphicModal extends React.Component {
                 </Form.Group>
                   <Form.Row>
                     <Form.Group className="check-box-param">
-                    
+
                       <div key={`inline-checkbox`} className="mb-2">
                         <Form.Check label="Hauteur de chutte" ref='height' value={this.state.height} onChange={this.handleChangeHeight} disabled={this.state.sizeCheck>=2 && !this.state.height}/>
                         <Form.Check label="Position des pâles" ref='position' value={this.state.position} onChange={this.handleChangePosition} disabled={this.state.sizeCheck>=2 && !this.state.position}/>
-                        
+
                       </div>
                     </Form.Group>
                     <Form.Group className="check-box-param">
@@ -174,7 +174,7 @@ class AddGraphicModal extends React.Component {
                       </div>
                     </Form.Group>
                   </Form.Row>
-                  
+
               </Form>
             </Modal.Body>
             <Modal.Footer>
@@ -186,7 +186,7 @@ class AddGraphicModal extends React.Component {
               </Button>
             </Modal.Footer>
           </Modal>
-            
+
         );
     }
 

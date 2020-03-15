@@ -2,27 +2,14 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import React from "react";
 import {  Scatter, Line } from 'react-chartjs-2';
 import { connect } from 'react-redux';
-import { addGraph, delHydraulic, delTurbine } from './Stores/DataFetcherActions';
-import { fetchData } from './Stores/DataActions';
+import { addGraph } from './Stores/GraphActions';
 import PropTypes from 'prop-types'
 
 class Graph extends React.Component{
 
 
-    addGraph = (data, dataFetcher, hydraulicID, turbineID, attribute1, attribute2 = null) => {
-        this.props.addGraph(data, dataFetcher, hydraulicID, turbineID, attribute1, attribute2);
-    };
-
-    delHydraulic = (hydraulicID) => {
-        this.props.delHydraulic(hydraulicID);
-    };
-
-    delTurbine = (hydraulicID, turbineID) => {
-        this.props.delTurbine(hydraulicID, turbineID);
-    };
-
-    fetchData = (hydraulicID, turbineID, attribute, lastData) => {
-        this.props.fetchData(hydraulicID, turbineID, attribute, lastData);
+    addGraph = (graphs, data, dataFetcher, hydraulicID, turbineID, attribute1, attribute2 = null) => {
+        this.props.addGraph(graphs, data, dataFetcher, hydraulicID, turbineID, attribute1, attribute2);
     };
 
 
@@ -87,8 +74,11 @@ class Graph extends React.Component{
 
     constructor(props) {
         super(props);
+
+        let { graphs, data, dataFetcher, hydraulicID, turbineID, attribute } = this.props;
+        
         // add new graph
-        this.addGraph(this.props.data, this.props.dataFetcher, this.props.hydraulicID, this.props.turbineID,  this.props.attribute);
+        this.addGraph(graphs, data, dataFetcher, hydraulicID, turbineID, attribute);
 
         this.state= {
 
@@ -137,9 +127,10 @@ class Graph extends React.Component{
 
 const mapStateToProps = (state) => ({
     data: state.data,
-    dataFetcher: state.dataFetcher
+    dataFetcher: state.dataFetcher,
+    graphs: state.graphs
 });
 
-const mapDispatchToProps = { addGraph, delHydraulic, delTurbine, fetchData };
+const mapDispatchToProps = { addGraph };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Graph);

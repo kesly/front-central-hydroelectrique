@@ -1,12 +1,10 @@
-import { ADD_HYDRAULIC_TO_DATA, ADD_TURBINE_TO_DATA, ADD_ATTRIBUTE_TO_DATA } from './DataActions';
-
 export const ADD_HYDRAULIC_TO_FETCHER = "ADD_HYDRAULIC_TO_FETCHER";
 export const ADD_TURBINE_TO_FETCHER = "ADD_TURBINE_TO_FETCHER";
 export const ADD_ATTRIBUTE_TO_FETCHER = "ADD_ATTRIBUTE_TO_FETCHER";
 
-export const DEL_HYDRAULIC = "DEL_HYDRAULIC";
-export const DEL_TURBINE = "DEL_TURBINE";
-export const DEL_ATTRIBUTE = "DEL_ATTRIBUTE";
+export const DEL_HYDRAULIC_FROM_FETCHER = "DEL_HYDRAULIC_FROM_FETCHER";
+export const DEL_TURBINE_FROM_FETCHER = "DEL_TURBINE_FROM_FETCHER";
+export const DEL_ATTRIBUTE_FROM_FETCHER = "DEL_ATTRIBUTE_FROM_FETCHER";
 
 const turbineCommonProperties = [ "high", "position" ];
 
@@ -30,43 +28,24 @@ export const addAttribute = (type, hydraulicID, turbineID, attribute) => ({
 });
 
 export const delHydraulic = (hydraulicID) => ({
-  type: DEL_HYDRAULIC,
+  type: DEL_HYDRAULIC_FROM_FETCHER,
   hydraulicID
 });
 
 export const delTurbine = (hydraulicID, turbineID) => ({
-  type: DEL_TURBINE,
+  type: DEL_TURBINE_FROM_FETCHER,
   hydraulicID,
   turbineID
 });
 
 export const delAttribute = (hydraulicID, turbineID, attribute) => ({
-  type: DEL_ATTRIBUTE,
+  type: DEL_ATTRIBUTE_FROM_FETCHER,
   hydraulicID,
   turbineID,
   attribute
 });
 
-export function addGraph(data, dataFetcher, hydraulicID, turbineID, attribute1, attribute2 = null) {
-  return (dispatch) => {
-    let typesForData = {
-      addHydraulic: ADD_HYDRAULIC_TO_DATA,
-      addTurbine: ADD_TURBINE_TO_DATA,
-      addAttribute: ADD_ATTRIBUTE_TO_DATA
-    };
-
-    let typesForDataFetcher = {
-      addHydraulic: ADD_HYDRAULIC_TO_FETCHER,
-      addTurbine: ADD_TURBINE_TO_FETCHER,
-      addAttribute: ADD_ATTRIBUTE_TO_FETCHER
-    };
-
-    dispatch(globalAddGraph(typesForData, data, hydraulicID, turbineID, attribute1, attribute2));
-    dispatch(globalAddGraph(typesForDataFetcher, dataFetcher, hydraulicID, turbineID, attribute1, attribute2));
-  };
-}
-
-export function globalAddGraph(types, obj, hydraulicID, turbineID, attribute1, attribute2 = null) {
+export function addGraphToDataAndFetcher(types, obj, hydraulicID, turbineID, attribute1, attribute2 = null) {
   return (dispatch) => {
     let turbineIDForAttributes = {
       attribute1: (turbineCommonProperties.includes(attribute1) ? "all" : turbineID),
@@ -129,7 +108,7 @@ export function globalAddGraph(types, obj, hydraulicID, turbineID, attribute1, a
   };
 }
 
-export function delGraph(dataFetcher, hydraulicID, turbineID, attribute1, attribute2 = null) {
+export function delGraphFromFetcher(dataFetcher, hydraulicID, turbineID, attribute1, attribute2 = null) {
   return (dispatch) => {
     // Si les attributs sont des attributs paratgés
     if (turbineCommonProperties.includes(attribute1) && (!attribute2 || turbineCommonProperties.includes(attribute2))) {
