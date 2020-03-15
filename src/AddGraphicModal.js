@@ -145,14 +145,14 @@ class AddGraphicModal extends React.Component {
               <Form onSubmit={this.handleSubmit}>
                 <Form.Group controlId="exampleForm.ControlSelect1">
                   <Form.Label>Centrales</Form.Label>
-                  <Form.Control as="select" value={this.state.hydraulic} onChange={this.handleChangeHydraulic}>
+                  <Form.Control as="select" onChange={this.handleChangeHydraulic}>
                     <option>Choisissez une centrale</option>
                     {this.createHydraulicItems()}
                   </Form.Control>
                 </Form.Group>
                 <Form.Group controlId="exampleForm.ControlSelect1">
                   <Form.Label>Turbines</Form.Label>
-                  <Form.Control as="select" value={this.state.turbine} onChange={this.handleChangeTurbine}>
+                  <Form.Control as="select"  onChange={this.handleChangeTurbine}>
                     <option>Choisissez une turbine</option>
                     {this.createTurbinesItems()}
                   </Form.Control>
@@ -160,17 +160,16 @@ class AddGraphicModal extends React.Component {
                   <Form.Row>
                     <Form.Group className="check-box-param">
                     
-                      <div inline key={`inline-checkbox`} className="mb-2">
+                      <div key={`inline-checkbox`} className="mb-2">
                         <Form.Check label="Hauteur de chutte" ref='height' value={this.state.height} onChange={this.handleChangeHeight} disabled={this.state.sizeCheck>=2 && !this.state.height}/>
                         <Form.Check label="Position des pâles" ref='position' value={this.state.position} onChange={this.handleChangePosition} disabled={this.state.sizeCheck>=2 && !this.state.position}/>
                         
                       </div>
                     </Form.Group>
                     <Form.Group className="check-box-param">
-                      <div inline key={`inline-checkbox`} className="mb-2">
+                      <div key={`inline-checkbox`} className="mb-2">
                         <Form.Check label="Débit" ref='debit'  value={this.state.debit} onChange={this.handleChangeDebit} disabled={this.state.sizeCheck>=2 && !this.state.debit}/>
                         <Form.Check label="Energie" ref='energie' value={this.state.energie} onChange={this.handleChangeEnergie} disabled={this.state.sizeCheck>=2 && !this.state.energie}/>
-                        
                       </div>
                     </Form.Group>
                   </Form.Row>

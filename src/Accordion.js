@@ -94,5 +94,4 @@ class Accordion extends React.Component {
 };
 
 
-
 export default Accordion;
