@@ -11,7 +11,6 @@ const initialState = {
 };
 
 export default function catalogReducer(state = initialState, action) {
-  // console.log('catalogReducer', state, action);
 
   switch (action.type) {
 
