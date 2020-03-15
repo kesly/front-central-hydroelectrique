@@ -121,9 +121,9 @@ class Graph extends React.Component{
 
         let graph;
         if (this.state.type === 'Scatter') {
-             graph = <Scatter data={this.getDataDebit()} options={this.state.options}/>
+            graph = <Scatter data={this.getDataDebit()} options={this.state.options}/>
         } else if (this.state.type === 'Line'){
-             graph = <Line data={this.getDataDebit()}/>;
+            graph = <Line data={this.getDataDebit()}/>;
         }
 
         return(
@@ -132,7 +132,6 @@ class Graph extends React.Component{
             </div>
         )
     }
-
 }
 
 const mapStateToProps = (state) => ({

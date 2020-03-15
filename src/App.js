@@ -26,7 +26,7 @@ class App extends React.Component {
         <AppDiv>
           <NavBar />
           <Hydraulics />
-          <Graph hydraulicID="Avignon" turbineID="Groupe1" attribute="debit"/>
+          
         </AppDiv>
       </Provider>
     );
