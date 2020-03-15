@@ -7,7 +7,7 @@ class Turbine extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            name: 'Delete',
+            name: props.name,
             id: props.index,
         }
     }
@@ -19,16 +19,14 @@ class Turbine extends React.Component {
 
 
     render() {
-        console.log(this.state.id)
+        
         return (
             <div className="mainAccordion" key={this.state.id}>
                 
                 <div className="graphe">
                     <span className="grapheContainer">
-                        
-                        <h4>Turbine {this.state.id}</h4> 
-                        <p>Ceci est un test</p> 
-                        <Graph entries={this} />
+                        <h4>{this.state.name}</h4> 
+                        <Graph />
                     </span>
                 </div>
                 <button className="accordion" onClick={()=>this.props.onDelete(this.state.id)}>
