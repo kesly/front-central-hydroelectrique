@@ -9,6 +9,8 @@ import NavBar from './Components/NavBar';
 import ReduxTester from './Components/ReduxTester';
 
 import 'bootstrap/dist/css/bootstrap.css';
+import './App.css';
+import Hydraulics from './Hydraulics';
 
 const store = createStore(
   rootReducer,
