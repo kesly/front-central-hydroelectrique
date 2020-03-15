@@ -1,8 +1,6 @@
 import React from 'react';
 import {Modal, Button, Form} from 'react-bootstrap'
 import {connect} from 'react-redux';
-const TURBINES = ["Lyon", "Pékin", "Geneve", "Paris"];
-const HYDRAULICS = ["France", "Guinée", "Norvège", "Suisse"];
 
 class AddGraphicModal extends React.Component {
 
