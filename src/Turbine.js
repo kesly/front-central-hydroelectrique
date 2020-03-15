@@ -10,7 +10,6 @@ class Turbine extends React.Component {
             name: props.name,
             id: props.index,
             hydraulic: props.hydraulic,
-            turbine: props.turbine,
         }
     }
 
@@ -30,7 +29,7 @@ class Turbine extends React.Component {
                         <h4>{this.state.name}</h4> 
                         <Graph 
                             hydraulicID={this.state.hydraulic} 
-                            turbineID={this.state.turbine} 
+                            turbineID={this.state.name}
                             attribute="debit"
                         />
                     </span>
