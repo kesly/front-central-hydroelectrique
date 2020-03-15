@@ -13,7 +13,7 @@ class AddGraphicModal extends React.Component {
         this.state = {
             show: this.props.show,
             sizeCheck: 0,
-            hydraulic: null,
+            hydraulic: '',
             turbine: null,
             height: false,
             energie: false,
@@ -27,7 +27,7 @@ class AddGraphicModal extends React.Component {
     createTurbinesItems(){
       let items = [];
       console.log(this.state.hydraulic);
-      if(this.state.hydraulic!== null){
+      if(this.state.hydraulic!== ''){
         this.props.hydraulicsID[this.state.hydraulic].map((turbineList) => (
           items.push(<option value={turbineList}>{turbineList}</option>)
         ))
@@ -37,7 +37,7 @@ class AddGraphicModal extends React.Component {
     }
       
       createHydraulicItems = () => {
-        console.log(this.props.hydraulicsID);
+        console.log(this.props);
         let items = [];   
         Object.keys(this.props.hydraulicsID).map((hydraulic) => (
             items.push(<option value={hydraulic}>{hydraulic}</option>)
@@ -47,8 +47,9 @@ class AddGraphicModal extends React.Component {
       }
 
     handleChangeHydraulic = (event) => {
+
         this.setState({
-            hydraulic: event.target.value
+            hydraulic: event.target.value 
         })
     }
 
@@ -146,7 +147,7 @@ class AddGraphicModal extends React.Component {
                 <Form.Group controlId="exampleForm.ControlSelect1">
                   <Form.Label>Centrales</Form.Label>
                   <Form.Control as="select" onChange={this.handleChangeHydraulic}>
-                    <option>Choisissez une centrale</option>
+                    <option value=''>Choisissez une centrale</option>
                     {this.createHydraulicItems()}
                   </Form.Control>
                 </Form.Group>
@@ -192,7 +193,7 @@ class AddGraphicModal extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-  hydraulicsID: state.catalog.hydraulicsID,
+  hydraulicsID: state.catalog.catalog,
   loading: state.catalog.loading,
   error: state.catalog.error
 });

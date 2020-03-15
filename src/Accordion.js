@@ -38,6 +38,7 @@ class Accordion extends React.Component {
         turbineList.push({
             id: this.state.size,
             name: this.state.turbine,
+            hydraulic: this.state.name,
             attr1: this.state.attr1,
             attr2: this.state.attr2,
         });
@@ -72,6 +73,7 @@ class Accordion extends React.Component {
                     this.state.turbineList.map(turbine => (
                         <Turbine
                             index={turbine.id}
+                            hydraulic={turbine.hydraulic}
                             name={turbine.name}
                             attr1={turbine.attr1}
                             attr2={turbine.attr2}

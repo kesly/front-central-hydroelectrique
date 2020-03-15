@@ -9,6 +9,8 @@ class Turbine extends React.Component {
         this.state = {
             name: props.name,
             id: props.index,
+            hydraulic: props.hydraulic,
+            turbine: props.turbine,
         }
     }
 
@@ -26,7 +28,11 @@ class Turbine extends React.Component {
                 <div className="graphe">
                     <span className="grapheContainer">
                         <h4>{this.state.name}</h4> 
-                        <Graph />
+                        <Graph 
+                            hydraulicID={this.state.hydraulic} 
+                            turbineID={this.state.turbine} 
+                            attribute="debit"
+                        />
                     </span>
                 </div>
                 <button className="accordion" onClick={()=>this.props.onDelete(this.state.id)}>
