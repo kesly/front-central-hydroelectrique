@@ -1,20 +1,20 @@
 import React from 'react';
 import {Modal, Button, Form} from 'react-bootstrap'
-
+import {connect} from 'react-redux';
 const TURBINES = ["Lyon", "Pékin", "Geneve", "Paris"];
 const HYDRAULICS = ["France", "Guinée", "Norvège", "Suisse"];
 
 class AddGraphicModal extends React.Component {
 
-
+    
     constructor(props){
         super(props);
-
+        
         this.state = {
             show: this.props.show,
             sizeCheck: 0,
-            hydraulic: '',
-            turbine: '',
+            hydraulic: null,
+            turbine: null,
             height: false,
             energie: false,
             position: false,
@@ -24,21 +24,25 @@ class AddGraphicModal extends React.Component {
         }
     }
 
-    createTurbinesItems(turbineList){
-        let items = [];
-             
-        turbineList.map((turbineList) => (
-            items.push(<option value={turbineList}>{turbineList}</option>)
+    createTurbinesItems(){
+      let items = [];
+      console.log(this.state.hydraulic);
+      if(this.state.hydraulic!== null){
+        this.props.hydraulicsID[this.state.hydraulic].map((turbineList) => (
+          items.push(<option value={turbineList}>{turbineList}</option>)
         ))
-        return items;
-      }
+      }  
       
-      createHydraulicItems = (hydraulicList) => {
+      return items;
+    }
+      
+      createHydraulicItems = () => {
+        console.log(this.props.hydraulicsID);
         let items = [];   
-        hydraulicList.map((hydraulic) => (
+        Object.keys(this.props.hydraulicsID).map((hydraulic) => (
             items.push(<option value={hydraulic}>{hydraulic}</option>)
         ))      
-        
+        console.log(items);
         return items;
       }
 
@@ -143,14 +147,14 @@ class AddGraphicModal extends React.Component {
                   <Form.Label>Centrales</Form.Label>
                   <Form.Control as="select" value={this.state.hydraulic} onChange={this.handleChangeHydraulic}>
                     <option>Choisissez une centrale</option>
-                    {this.createHydraulicItems(HYDRAULICS)}
+                    {this.createHydraulicItems()}
                   </Form.Control>
                 </Form.Group>
                 <Form.Group controlId="exampleForm.ControlSelect1">
                   <Form.Label>Turbines</Form.Label>
                   <Form.Control as="select" value={this.state.turbine} onChange={this.handleChangeTurbine}>
                     <option>Choisissez une turbine</option>
-                    {this.createTurbinesItems(TURBINES)}
+                    {this.createTurbinesItems()}
                   </Form.Control>
                 </Form.Group>
                   <Form.Row>
@@ -188,4 +192,10 @@ class AddGraphicModal extends React.Component {
 
 }
 
-export default AddGraphicModal
+const mapStateToProps = (state) => ({
+  hydraulicsID: state.catalog.hydraulicsID,
+  loading: state.catalog.loading,
+  error: state.catalog.error
+});
+
+export default connect(mapStateToProps)(AddGraphicModal);

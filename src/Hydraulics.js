@@ -160,6 +160,4 @@ const mapStateToProps = (state) => ({
   error: state.catalog.error
 });
 
-const mapDispatchToProps = { fetchCatalog };
-
-export default connect(mapStateToProps, mapDispatchToProps)(Hydraulics);
+export default connect(mapStateToProps)(Hydraulics);
