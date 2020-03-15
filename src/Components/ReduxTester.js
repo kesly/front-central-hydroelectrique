@@ -1,27 +1,24 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { addGraph, delHydraulic, delTurbine, fetchData } from '../Stores/DataActions';
+import { addGraph, delGraph } from '../Stores/DataFetcherActions';
+import { fetchData } from '../Stores/DataActions';
 
 class ReduxTester extends React.Component {
 
-  addGraph = (hydraulicID, turbineID) => {
-    this.props.addGraph(hydraulicID, turbineID);
+  addGraph = (data, dataFetcher, hydraulicID, turbineID, attribute1, attribute2 = null) => {
+    this.props.dispatch(addGraph(data, dataFetcher, hydraulicID, turbineID, attribute1, attribute2));
   }
 
-  delHydraulic = (hydraulicID) => {
-    this.props.delHydraulic(hydraulicID);
-  }
-
-  delTurbine = (hydraulicID, turbineID) => {
-    this.props.delTurbine(hydraulicID, turbineID);
+  delGraph = (dataFetcher, hydraulicID, turbineID, attribute1, attribute2 = null) => {
+    this.props.dispatch(delGraph(dataFetcher, hydraulicID, turbineID, attribute1, attribute2));
   }
 
   fetchData = (hydraulicID, turbineID, attribute, lastData) => {
-    this.props.fetchData(hydraulicID, turbineID, attribute, lastData);
+    this.props.dispatch(fetchData(hydraulicID, turbineID, attribute, lastData));
   }
 
   render() {
-    const { data } = this.props;
+    const { data, dataFetcher } = this.props;
 
     return (
       <div>
@@ -40,11 +37,9 @@ class ReduxTester extends React.Component {
                           <h5>{ attribute }</h5>
                           <p>
                             {
-                              (turbineID != "high") && (
-                                Object.keys(data[hydraulicID][turbineID][attribute].data).map((timestamp, index) => {
-                                  return <span key={ index }>timestamp : { data[hydraulicID][turbineID][attribute].data[timestamp] }<br/></span>;
-                                })
-                              )
+                              Object.keys(data[hydraulicID][turbineID][attribute].data).map((timestamp, index) => {
+                                return <span key={ index }>{ timestamp } : { data[hydraulicID][turbineID][attribute].data[timestamp] }<br/></span>;
+                              })
                             }
                           </p>
                         </div>;
@@ -57,20 +52,10 @@ class ReduxTester extends React.Component {
           })
         }
         <span>Create a graph for Avignon Groupe1</span>
-        <button onClick={ () => this.addGraph("Avignon", "Groupe1") }>Create Graph</button>
+        <button onClick={ () => this.addGraph(data, dataFetcher, "Avignon", "Groupe1", "power", "high") }>Create Graph</button>
         <p></p>
-        <span>Load Debit1 data for Avignon Groupe1</span>
-        <button onClick={ () => {
-          if(Object.entries(data).length > 0) {
-            this.fetchData("Avignon", "Groupe1", "Debit1", Object.entries(data.Avignon.Groupe1.debit.data).length);
-          }
-        } }>Load Data</button>
-        <p></p>
-        <span>Delete Avignon hydraulic</span>
-        <button onClick={ () => this.delHydraulic("Avignon") }>Delete Hydraulic</button>
-        <p></p>
-        <span>Delete Avignon's Groupe1 turbine</span>
-        <button onClick={ () => this.delTurbine("Avignon", "Groupe1") }>Delete Turbine</button>
+        <span>Delete Avignon Groupe1's graph</span>
+        <button onClick={ () => this.delGraph(dataFetcher, "Avignon", "Groupe1", "power", "high") }>Delete Graph</button>
       </div>
     )
   }
@@ -78,9 +63,8 @@ class ReduxTester extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-  data: state.data.data
+  data: state.data,
+  dataFetcher: state.dataFetcher
 });
 
-const mapDispatchToProps = { addGraph, delHydraulic, delTurbine, fetchData };
-
-export default connect(mapStateToProps, mapDispatchToProps)(ReduxTester);
+export default connect(mapStateToProps)(ReduxTester);
