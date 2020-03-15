@@ -7,30 +7,17 @@ class Accordion extends React.Component {
 
     constructor(props) {
         super(props);
-        console.log('++++++++++++++++++++++++++++' + props.index);
         this.state = {
-            folded : false,
-            name: props.name,
+            folded : true,
+            name: props.hydraulic,
+            turbine: props.turbine,
+            attr1: props.attr1,
+            attr2: props.attr2,
             id: props.index,
             size: 0,
             turbineList: [],
         };
-        
-    }
-
-    renderTurbine(index){
-
-        return (
-            <div className="main-hydrolic">
-                
-                <Turbine
-                    name={this.state.name}
-                    index={index}
-                    key={index}
-                    onDelete={this.deleteTurbine}
-                />
-            </div>
-        );
+        this.addTurbine();
     }
 
     deleteTurbine = (index) => {
@@ -50,8 +37,10 @@ class Accordion extends React.Component {
         
         turbineList.push({
             id: this.state.size,
-            name: this.state.name,
-            attribute: {x: 'hauteur', y: 'debit'}
+            name: this.state.turbine,
+            hydraulic: this.state.name,
+            attr1: this.state.attr1,
+            attr2: this.state.attr2,
         });
 
         this.setState({
@@ -67,14 +56,14 @@ class Accordion extends React.Component {
     }
 
     render() {
-        console.log(this.state.turbineList);
+        
         return (
             <div className="accordion" id="accordionExample">
         <div className="card">
           <div className="card-header" id="headingOne">
             <h2 className="mb-0">
               <button onClick={() => this.clicAccordion()} className="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                Group {this.state.id}
+                {this.state.name}
               </button>
             </h2>
           </div>
@@ -83,8 +72,11 @@ class Accordion extends React.Component {
                 { this.state.folded &&
                     this.state.turbineList.map(turbine => (
                         <Turbine
-                            name={turbine.name}
                             index={turbine.id}
+                            hydraulic={turbine.hydraulic}
+                            name={turbine.name}
+                            attr1={turbine.attr1}
+                            attr2={turbine.attr2}
                             key={turbine.id}
                             onDelete={this.deleteTurbine}
                         />
@@ -102,7 +94,6 @@ class Accordion extends React.Component {
         )
     };
 };
-
 
 
 export default Accordion;
