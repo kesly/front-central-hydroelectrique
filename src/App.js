@@ -11,6 +11,7 @@ import ReduxTester from './Components/ReduxTester';
 import 'bootstrap/dist/css/bootstrap.css';
 import './App.css';
 import Hydraulics from './Hydraulics';
+import Graph from "./Graph";
 
 const store = createStore(
   rootReducer,
@@ -24,7 +25,7 @@ class App extends React.Component {
       <Provider store={ store }>
         <AppDiv>
           <NavBar />
-          <ReduxTester />
+          <Graph hydraulicID="Avignon" turbineID="Groupe1" attribute="Debit1"/>
         </AppDiv>
       </Provider>
     );

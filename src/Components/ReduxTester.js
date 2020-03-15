@@ -22,7 +22,8 @@ class ReduxTester extends React.Component {
 
   render() {
     const { data } = this.props;
-
+      console.log("test");
+      console.log(Object.keys(data));
     return (
       <div>
         <h2>Centrales</h2>
