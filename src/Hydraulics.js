@@ -26,7 +26,7 @@ class Hydraulics extends React.Component {
     };
 }
 
-  handleShow(){
+  handleShow = () => {
     this.setState({ show: true });
   }
 
@@ -34,8 +34,7 @@ class Hydraulics extends React.Component {
     this.setState({ show: false });
   }
 
-  handleClickAccordion(index){
-      //console.log('handleClickAccordion : '+index);
+  handleClickAccordion(index) {
       const accordions = this.state.accordions.slice();
       accordions[index] = this.state.accordions[index] ? false: true;
 
@@ -43,29 +42,6 @@ class Hydraulics extends React.Component {
           accordions: accordions,
       });
   }
-
-  /* addAccordion(hydraulic, turbine, attr1, attr2){
-      //let size = this.state.size;
-      //const accordions = Object.assign([], this.state.accordions);
-      console.log(this.state.accordions);
-      const accordions = this.state.size != 0 ?
-                          this.state.accordions.filter(accordion => accordion.hydraulic === hydraulic) :
-                          this.state.accordions;
-      console.log(accordions);
-      accordions.push({
-        id: this.state.size,
-        hydraulic: hydraulic,
-        turbine: turbine,
-        attr1: attr1,
-        attr2: attr2,
-      });
-      //console.log(accordions);
-      this.setState({
-          accordions: accordions,
-          size: (this.state.size+1),
-      });
-  } */
-
 
   handleDeleteAccordions = index =>{
     const accordions = this.state.accordions.filter(accordion => accordion.id!==index);
@@ -80,7 +56,6 @@ class Hydraulics extends React.Component {
     const { hydraulicID, turbineID, attribute1, attribute2 } = form;
 
     this.addGraph(graphs, data, dataFetcher, hydraulicID, turbineID, attribute1, attribute2 );
-    
   }
 
   deleteGraph = (hydraulicID, turbineID, attribute1, attribute2) => {
@@ -90,61 +65,39 @@ class Hydraulics extends React.Component {
 
   render() {
     const { graphs } = this.props;
-    
-      return (
-          <div className="main-Hydraulics">
-            <Button variant="primary" className='btn' onClick={ () => this.handleShow() }>ADD HYDRAULIC</Button>
 
-              {
-                Object.keys(graphs).map((hydraulicID, indexHydraulic) => {
-                  return (
-                    <Accordion key={ indexHydraulic } hydraulic={ hydraulicID }>
-                      {
-                        
-                        graphs[hydraulicID].map((graphParameters, index) => {
-                          return  <Graph closeButton key={ index } 
-                                        id={index}
-                                        onDelete={ this.deleteGraph }
-                                        hydraulicID={ hydraulicID }
-                                        turbineID={ graphParameters.turbineID }
-                                        attribute1={ graphParameters.attribute1 }
-                                        attribute2={ graphParameters.attribute2 }
-                                  />;
-                        })
-                      }
-                    </Accordion>
-                  );
-                })
-              }
-              {/* <div>
-              {
-                this.state.accordions.map((accordion) => (
+    return (
+      <div className="main-Hydraulics">
+        <Button variant="primary" className='btn' onClick={ () => this.handleShow() }>ADD HYDRAULIC</Button>
 
-                    <Accordion
-                      hydraulic={accordion.hydraulic}
-                      index={accordion.id}
-                      key={accordion.id}
-                      turbine={accordion.turbine}
-                      attr1={accordion.attr1}
-                      attr2={accordion.attr2}
-                      onDelete={this.handleDeleteAccordions}
-                    />
+          {
+            Object.keys(graphs).map((hydraulicID, index) => {
+              return (
+                <Accordion key={ index } hydraulic={ hydraulicID }>
+                  {
+                    graphs[hydraulicID].map((graphParameters, index) => {
+                      return <Graph key={ index }
+                                    hydraulicID={ hydraulicID }
+                                    turbineID={ graphParameters.turbineID }
+                                    attribute1={ graphParameters.attribute1 }
+                                    attribute2={ graphParameters.attribute2 }
+                                    onDelete={ this.deleteGraph }
+                      />;
+                    })
+                  }
+                </Accordion>
+              );
+            })
+          }
 
-                )
-
-                )
-              }
-              </div> */}
-              {
-                this.state.show && //AddAccordion
-                <AddGraphicModal
-                  show={this.state.show}
-                  onSubmit={this.handleSubmit}
-                  onClose={this.handleClose}
-                />
-              }
-          </div>
-      );
+          {
+            this.state.show && <AddGraphicModal show={this.state.show}
+                                                onSubmit={this.handleSubmit}
+                                                onClose={this.handleClose}
+            />
+          }
+      </div>
+    );
   }
 
 }

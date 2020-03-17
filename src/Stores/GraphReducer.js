@@ -49,7 +49,7 @@ export default function graphReducer(state = {}, action) {
 
     case DEL_ATTRIBUTE_FROM_GRAPH:
       let filteredHydraulic = state[action.hydraulicID].filter((hydraulicObj, attribute) => {
-        return JSON.stringify(attribute) !== JSON.stringify(graphParameters);
+        return JSON.stringify(state[action.hydraulicID][attribute]) !== JSON.stringify(graphParameters);
       });
 
       return {

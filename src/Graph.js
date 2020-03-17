@@ -60,7 +60,7 @@ class Graph extends React.Component{
 
         const { data, hydraulicID, turbineID } = this.props;
         const { attribute1, attribute2 } = this.state;
-        
+
         return {
             labels: Object.keys(data).length!==0?[...Object.keys(data[hydraulicID][attribute1.turbineID][attribute1.value].data)]: [],
             datasets: [
@@ -117,6 +117,8 @@ class Graph extends React.Component{
     }
 
     render() {
+        const { data, hydraulicID, turbineID } = this.props;
+        const { attribute1, attribute2 } = this.state;
 
         let graph;
         if (this.state.type === 'Scatter') {
@@ -128,7 +130,7 @@ class Graph extends React.Component{
         return(
             <div>
                 {graph}
-                <Button variant="danger" onClick={() => this.props.onDelete(this.props.hydraulicID, this.props.turbineID, this.state.attribute1, this.state.attribute2)}>
+                <Button variant="danger" onClick={() => this.props.onDelete(hydraulicID, turbineID, attribute1.value, (attribute2 ? attribute2.value : null))}>
                     Supprimer
                 </Button>
             </div>

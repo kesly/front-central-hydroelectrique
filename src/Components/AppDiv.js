@@ -9,7 +9,7 @@ class AppDiv extends React.Component {
   fetchCatalog = () => { this.props.dispatch(fetchCatalog()); }
 
   runDataFetcher = () => {
-    const { data, dataFetcher } = this.props;
+    const { dataFetcher } = this.props;
 
     // Pour chaque centrale
     Object.keys(dataFetcher).forEach((hydraulicID, index) => {
@@ -17,15 +17,14 @@ class AppDiv extends React.Component {
       Object.keys(dataFetcher[hydraulicID]).forEach((turbineID, index) => {
         // Pour chaque attribut
         dataFetcher[hydraulicID][turbineID].forEach((attribute, index) => {
-          let lastData = Object.keys(data[hydraulicID][turbineID][attribute].data).length;
           // Récupérer la donnée
-          this.props.dispatch(fetchData(hydraulicID, turbineID, attribute, lastData));
+          this.props.dispatch(fetchData(hydraulicID, turbineID, attribute));
         });
       });
     });
 
     // Récupère les données une nouvelle fois dans 1000 millisecondes
-    setTimeout((data, dataFetcher) => this.runDataFetcher(), 1000);
+    // setTimeout(() => this.runDataFetcher(), 1000);
   }
 
   componentDidMount() {
@@ -44,7 +43,6 @@ class AppDiv extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-  data: state.data,
   dataFetcher: state.dataFetcher
 });
 

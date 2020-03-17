@@ -59,7 +59,6 @@ class AddGraphicModal extends React.Component {
     handleChangeHeight = (event) => {
         if(this.state.sizeCheck<2 || this.state.high){
             this.setState({
-                high:  this.refs.high.checked,
                 high: !this.state.high,
                 attribute1: !this.state.high ? 'high' : '',
                 attribute2: (!this.state.high && this.state.attribute1!=='') ? 'high' : '',
@@ -72,7 +71,6 @@ class AddGraphicModal extends React.Component {
     handleChangePosition = (event) => {
         if(this.state.sizeCheck<2 || this.state.position){
             this.setState({
-                position: this.refs.position.checked,
                 position: !this.state.position,
                 attribute1: !this.state.position ? 'position' : '',
                 attribute2: (!this.state.position && this.state.attribute1!=='') ? 'position' : '',
@@ -85,7 +83,6 @@ class AddGraphicModal extends React.Component {
     handleChangeEnergie = (event) => {
         if(this.state.sizeCheck<2 || this.state.power){
             this.setState({
-                power: this.refs.power.checked,
                 power: !this.state.power,
                 attribute1: !this.state.power ? 'power' : '',
                 attribute2: (!this.state.power && this.state.attribute1!=='') ? 'power' : '',
@@ -98,7 +95,6 @@ class AddGraphicModal extends React.Component {
     handleChangeDebit = (event) => {
         if(this.state.sizeCheck<2 || this.state.debit){
             this.setState({
-                debit:  this.refs.debit.checked,
                 debit: !this.state.debit,
                 attribute1: !this.state.debit ? 'debit' : '',
                 attribute2: (!this.state.debit && this.state.attribute1!=='') ? 'debit' : '',

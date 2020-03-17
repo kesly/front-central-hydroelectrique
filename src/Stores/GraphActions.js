@@ -10,7 +10,7 @@ export const ADD_ATTRIBUTE_TO_GRAPH = "ADD_ATTRIBUTE_TO_GRAPH";
 export const DEL_HYDRAULIC_FROM_GRAPH = "DEL_HYDRAULIC_FROM_GRAPH";
 export const DEL_ATTRIBUTE_FROM_GRAPH = "DEL_ATTRIBUTE_FROM_GRAPH";
 
-export const TURBINES_COMMON_PROPERTIES = [ "high", "position" ];
+export const TURBINES_COMMON_PROPERTIES = [ "high" ];
 
 export const addHydraulic = (hydraulicID, turbineID, attribute1, attribute2 = null) => ({
   type: ADD_HYDRAULIC_TO_GRAPH,
