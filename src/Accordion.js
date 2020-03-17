@@ -7,12 +7,11 @@ class Accordion extends React.Component {
 
     constructor(props) {
         super(props);
+
         this.state = {
             folded : true,
             name: props.hydraulic,
-            turbine: props.turbine,
-            attr1: props.attr1,
-            attr2: props.attr2,
+            graph: props.graph,
             id: props.index,
             size: 0,
             turbineList: [],
@@ -27,24 +26,24 @@ class Accordion extends React.Component {
 
     render() {
         return (
-            <div className="accordion" id="accordionExample">
-        <div className="card">
-          <div className="card-header" id="headingOne">
-            <h2 className="mb-0">
-              <button onClick={ this.clicAccordion } className="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                { this.state.name }
-              </button>
-            </h2>
-          </div>
-          <div id="collapseOne" className="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
-            <div className="card-body">
-                { this.props.children }
+          <div className="accordion" id="accordionExample">
+            <div className="card">
+              <div className="card-header" id="headingOne">
+                <h2 className="mb-0">
+                  <button onClick={ this.clicAccordion } className="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    { this.state.name }
+                  </button>
+                </h2>
+              </div>
+              <div id="collapseOne" className="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+                <div className="card-body">
+                    { this.props.children }
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
-        )
-    };
+        );
+    }
 
 }
 

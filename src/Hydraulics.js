@@ -2,17 +2,19 @@ import React from 'react';
 import { connect } from 'react-redux';
 import  Accordion  from './Accordion';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import AddIcon from '@material-ui/icons/Add';
-import { Button } from 'react-bootstrap';
+import {Button} from 'react-bootstrap';
 import AddGraphicModal from './AddGraphicModal';
 import Graph from './Graph';
-
-import { addGraph } from './Stores/GraphActions';
+import { addGraph, delGraph } from './Stores/GraphActions';
 
 class Hydraulics extends React.Component {
 
   addGraph = (graphs, data, dataFetcher, hydraulicID, turbineID, attribute1, attribute2 = null) => {
     this.props.dispatch(addGraph(graphs, data, dataFetcher, hydraulicID, turbineID, attribute1, attribute2));
+  }
+
+  delGraph = (graphs, dataFetcher, hydraulicID, turbineID, attribute1, attribute2 = null) => {
+    this.props.dispatch(delGraph(graphs, dataFetcher, hydraulicID, turbineID, attribute1, attribute2));
   }
 
   constructor(props){
@@ -37,9 +39,7 @@ class Hydraulics extends React.Component {
       accordions[index] = this.state.accordions[index] ? false: true;
 
       this.setState({
-          size: this.state.size,
           accordions: accordions,
-          name: this.state.name,
       });
   }
 
@@ -58,40 +58,46 @@ class Hydraulics extends React.Component {
     this.addGraph(graphs, data, dataFetcher, hydraulicID, turbineID, attribute1, attribute2 );
   }
 
+  deleteGraph = (hydraulicID, turbineID, attribute1, attribute2) => {
+    const { graphs, dataFetcher } = this.props;
+    this.delGraph(graphs, dataFetcher, hydraulicID, turbineID, attribute1, attribute2 = null)
+  }
+
   render() {
     const { graphs } = this.props;
 
-      return (
-        <div className="main-Hydraulics">
-          <Button variant="primary" className='btn' onClick={ () => this.handleShow() }>ADD HYDRAULIC</Button>
+    return (
+      <div className="main-Hydraulics">
+        <Button variant="primary" className='btn' onClick={ () => this.handleShow() }>ADD HYDRAULIC</Button>
 
-            {
-              Object.keys(graphs).map((hydraulicID, index) => {
-                return (
-                  <Accordion key={ index } hydraulic={ hydraulicID }>
-                    {
-                      graphs[hydraulicID].map((graphParameters, index) => {
-                        return <Graph key={ index }
-                                      hydraulicID={ hydraulicID }
-                                      turbineID={ graphParameters.turbineID }
-                                      attribute1={ graphParameters.attribute1 }
-                                      attribute2={ graphParameters.attribute2 }
-                        />;
-                      })
-                    }
-                  </Accordion>
-                );
-              })
-            }
+          {
+            Object.keys(graphs).map((hydraulicID, index) => {
+              return (
+                <Accordion key={ index } hydraulic={ hydraulicID }>
+                  {
+                    graphs[hydraulicID].map((graphParameters, index) => {
+                      return <Graph key={ index }
+                                    hydraulicID={ hydraulicID }
+                                    turbineID={ graphParameters.turbineID }
+                                    attribute1={ graphParameters.attribute1 }
+                                    attribute2={ graphParameters.attribute2 }
+                                    onDelete={ this.deleteGraph }
+                      />;
+                    })
+                  }
+                </Accordion>
+              );
+            })
+          }
 
-            {
-              this.state.show && <AddGraphicModal show={this.state.show}
-                                                  onSubmit={this.handleSubmit}
-                                                  onClose={this.handleClose}
-              />
-            }
-        </div>
-      );
+          {
+            this.state.show && <AddGraphicModal show={this.state.show}
+                                                onSubmit={this.handleSubmit}
+                                                onClose={this.handleClose}
+            />
+          }
+      </div>
+    );
   }
 
 }

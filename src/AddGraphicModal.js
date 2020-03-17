@@ -132,7 +132,7 @@ class AddGraphicModal extends React.Component {
         //
         return (
             <Modal show={this.state.show} onHide={this.handleClose}>
-            <Modal.Header closeButton>
+            <Modal.Header >
               <Modal.Title>Parametrage du graphique</Modal.Title>
             </Modal.Header>
             <Modal.Body>

@@ -4,6 +4,7 @@ import {  Scatter, Line } from 'react-chartjs-2';
 import { connect } from 'react-redux';
 import { TURBINES_COMMON_PROPERTIES } from "./Stores/GraphActions";
 import PropTypes from 'prop-types';
+import { Button} from 'react-bootstrap'
 
 class Graph extends React.Component{
 
@@ -12,7 +13,35 @@ class Graph extends React.Component{
     //     this.props.addGraph(graphs, data, dataFetcher, hydraulicID, turbineID, attribute1, attribute2);
     // };
 
+    constructor(props) {
+        super(props);
 
+        // let { graphs, data, dataFetcher, hydraulicID, turbineID, attribute1 } = this.props;
+
+        // add new graph
+        // this.addGraph(graphs, data, dataFetcher, hydraulicID, turbineID, attribute1);
+
+        this.state= {
+            id: props.index,
+            options: this.configOptions(),
+            type: this.getType(),
+            attribute1: {
+              turbineID: TURBINES_COMMON_PROPERTIES.includes(this.props.attribute1) ? "all" : this.props.turbineID,
+              value: this.props.attribute1
+            }
+        }
+
+        if (this.props.attribute2) {
+          this.state = {
+            ...this.state,
+            attribute2: {
+              turbineID: TURBINES_COMMON_PROPERTIES.includes(this.props.attribute2) ? "all" : this.props.turbineID,
+              value: this.props.attribute2
+            }
+          }
+        }
+
+    }
 
     getDataFromStore(){
       return {
@@ -36,9 +65,7 @@ class Graph extends React.Component{
 
         const { data, hydraulicID, turbineID } = this.props;
         const { attribute1, attribute2 } = this.state;
-console.log(data)
-console.log(attribute1.turbineID)
-console.log(attribute1.value)
+
         return {
             labels: Object.keys(data).length!==0?[...Object.keys(data[hydraulicID][attribute1.turbineID][attribute1.value].data)]: [],
             datasets: [
@@ -75,35 +102,6 @@ console.log(attribute1.value)
 
     }
 
-    constructor(props) {
-        super(props);
-
-        // let { graphs, data, dataFetcher, hydraulicID, turbineID, attribute1 } = this.props;
-
-        // add new graph
-        // this.addGraph(graphs, data, dataFetcher, hydraulicID, turbineID, attribute1);
-
-        this.state= {
-            options: this.configOptions(),
-            type: this.getType(),
-            attribute1: {
-              turbineID: TURBINES_COMMON_PROPERTIES.includes(this.props.attribute1) ? "all" : this.props.turbineID,
-              value: this.props.attribute1
-            }
-        }
-
-        if (this.props.attribute2) {
-          this.state = {
-            ...this.state,
-            attribute2: {
-              turbineID: TURBINES_COMMON_PROPERTIES.includes(this.props.attribute2) ? "all" : this.props.turbineID,
-              value: this.props.attribute2
-            }
-          }
-        }
-
-    }
-
     static defaultProps = {
         title: {},
         type: 'Line'
@@ -124,6 +122,8 @@ console.log(attribute1.value)
     }
 
     render() {
+        const { data, hydraulicID, turbineID } = this.props;
+        const { attribute1, attribute2 } = this.state;
 
         let graph;
         if (this.state.type === 'Scatter') {
@@ -135,6 +135,9 @@ console.log(attribute1.value)
         return(
             <div>
                 {graph}
+                <Button variant="danger" onClick={() => this.props.onDelete(hydraulicID, turbineID, attribute1.value, (attribute2 ? attribute2.value : null))}>
+                    Supprimer
+                </Button>
             </div>
         )
     }
