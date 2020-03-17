@@ -2,16 +2,15 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import React from "react";
 import {  Scatter, Line } from 'react-chartjs-2';
 import { connect } from 'react-redux';
-import { addGraph } from './Stores/GraphActions';
-import PropTypes from 'prop-types'
-import Configuration from "./Configuration";
+import { TURBINES_COMMON_PROPERTIES } from "./Stores/GraphActions";
+import PropTypes from 'prop-types';
 
 class Graph extends React.Component{
 
 
-    addGraph = (graphs, data, dataFetcher, hydraulicID, turbineID, attribute1, attribute2 = null) => {
-        this.props.addGraph(graphs, data, dataFetcher, hydraulicID, turbineID, attribute1, attribute2);
-    };
+    // addGraph = (graphs, data, dataFetcher, hydraulicID, turbineID, attribute1, attribute2 = null) => {
+    //     this.props.addGraph(graphs, data, dataFetcher, hydraulicID, turbineID, attribute1, attribute2);
+    // };
 
 
 
@@ -35,13 +34,16 @@ class Graph extends React.Component{
 
     getDataDebit(){
 
-        const {data, hydraulicID, turbineID, attribute} = this.props;
-
+        const { data, hydraulicID, turbineID } = this.props;
+        const { attribute1, attribute2 } = this.state;
+console.log(data)
+console.log(attribute1.turbineID)
+console.log(attribute1.value)
         return {
-            labels: Object.keys(data).length!==0?[...Object.keys(data[hydraulicID][turbineID][attribute].data)]: [],
+            labels: Object.keys(data).length!==0?[...Object.keys(data[hydraulicID][attribute1.turbineID][attribute1.value].data)]: [],
             datasets: [
                 {
-                    label: `${hydraulicID} - ${turbineID} - ${attribute}` ,
+                    label: `${hydraulicID} - ${turbineID} - ${attribute1}` ,
                     fill: false,
                     lineTension: 0.1,
                     backgroundColor: 'rgba(75,192,192,0.4)',
@@ -59,7 +61,7 @@ class Graph extends React.Component{
                     pointHoverBorderWidth: 2,
                     pointRadius: 1,
                     pointHitRadius: 10,
-                    data: Object.keys(data).length!==0?[...Object.values(data[hydraulicID][turbineID][attribute].data)]: []
+                    data: Object.keys(data).length!==0?[...Object.values(data[hydraulicID][attribute1.turbineID][attribute1.value].data)]: []
                 }
             ]
         };
@@ -76,15 +78,28 @@ class Graph extends React.Component{
     constructor(props) {
         super(props);
 
-        let { graphs, data, dataFetcher, hydraulicID, turbineID, attribute } = this.props;
-        
+        // let { graphs, data, dataFetcher, hydraulicID, turbineID, attribute1 } = this.props;
+
         // add new graph
-        this.addGraph(graphs, data, dataFetcher, hydraulicID, turbineID, attribute);
+        // this.addGraph(graphs, data, dataFetcher, hydraulicID, turbineID, attribute1);
 
         this.state= {
-
             options: this.configOptions(),
             type: this.getType(),
+            attribute1: {
+              turbineID: TURBINES_COMMON_PROPERTIES.includes(this.props.attribute1) ? "all" : this.props.turbineID,
+              value: this.props.attribute1
+            }
+        }
+
+        if (this.props.attribute2) {
+          this.state = {
+            ...this.state,
+            attribute2: {
+              turbineID: TURBINES_COMMON_PROPERTIES.includes(this.props.attribute2) ? "all" : this.props.turbineID,
+              value: this.props.attribute2
+            }
+          }
         }
 
     }
@@ -127,10 +142,10 @@ class Graph extends React.Component{
 
 const mapStateToProps = (state) => ({
     data: state.data,
-    dataFetcher: state.dataFetcher,
-    graphs: state.graphs
+    // dataFetcher: state.dataFetcher,
+    // graphs: state.graphs
 });
 
-const mapDispatchToProps = { addGraph };
+// const mapDispatchToProps = { addGraph };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Graph);
+export default connect(mapStateToProps/* , mapDispatchToProps */)(Graph);

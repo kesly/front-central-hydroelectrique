@@ -6,12 +6,10 @@ import thunk from 'redux-thunk';
 import rootReducer from './Stores/RootReducer';
 import AppDiv from './Components/AppDiv';
 import NavBar from './Components/NavBar';
-import ReduxTester from './Components/ReduxTester';
+import Hydraulics from './Hydraulics';
 
 import 'bootstrap/dist/css/bootstrap.css';
 import './App.css';
-import Hydraulics from './Hydraulics';
-import Graph from "./Graph";
 
 const store = createStore(
   rootReducer,

@@ -1,4 +1,4 @@
-import { saveAs } from 'file-saver';
+/* import { saveAs } from 'file-saver';
 
 
 class Configuration {
@@ -16,9 +16,6 @@ class Configuration {
 
     }
 
-    /**
-     * sauvegarde un fichier
-     */
     static exportConfiration(){
         //let FileSaver = require('file-saver');
         let blob = new Blob(["Hello, world!"], {type: "text/plain;charset=utf-8"});
@@ -26,4 +23,4 @@ class Configuration {
     }
 }
 
-export default Configuration;
+export default Configuration; */

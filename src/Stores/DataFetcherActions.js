@@ -1,3 +1,5 @@
+import { TURBINES_COMMON_PROPERTIES } from "./GraphActions";
+
 export const ADD_HYDRAULIC_TO_FETCHER = "ADD_HYDRAULIC_TO_FETCHER";
 export const ADD_TURBINE_TO_FETCHER = "ADD_TURBINE_TO_FETCHER";
 export const ADD_ATTRIBUTE_TO_FETCHER = "ADD_ATTRIBUTE_TO_FETCHER";
@@ -5,8 +7,6 @@ export const ADD_ATTRIBUTE_TO_FETCHER = "ADD_ATTRIBUTE_TO_FETCHER";
 export const DEL_HYDRAULIC_FROM_FETCHER = "DEL_HYDRAULIC_FROM_FETCHER";
 export const DEL_TURBINE_FROM_FETCHER = "DEL_TURBINE_FROM_FETCHER";
 export const DEL_ATTRIBUTE_FROM_FETCHER = "DEL_ATTRIBUTE_FROM_FETCHER";
-
-const turbineCommonProperties = [ "high", "position" ];
 
 export const addHydraulic = (type, hydraulicID, turbineID) => ({
   type,
@@ -48,8 +48,8 @@ export const delAttribute = (hydraulicID, turbineID, attribute) => ({
 export function addGraphToDataAndFetcher(types, obj, hydraulicID, turbineID, attribute1, attribute2 = null) {
   return (dispatch) => {
     let turbineIDForAttributes = {
-      attribute1: (turbineCommonProperties.includes(attribute1) ? "all" : turbineID),
-      attribute2: (turbineCommonProperties.includes(attribute2) ? "all" : turbineID)
+      attribute1: (TURBINES_COMMON_PROPERTIES.includes(attribute1) ? "all" : turbineID),
+      attribute2: (TURBINES_COMMON_PROPERTIES.includes(attribute2) ? "all" : turbineID)
     }
 
     // Si la centrale existe
@@ -111,7 +111,7 @@ export function addGraphToDataAndFetcher(types, obj, hydraulicID, turbineID, att
 export function delGraphFromFetcher(dataFetcher, hydraulicID, turbineID, attribute1, attribute2 = null) {
   return (dispatch) => {
     // Si les attributs sont des attributs paratgés
-    if (turbineCommonProperties.includes(attribute1) && (!attribute2 || turbineCommonProperties.includes(attribute2))) {
+    if (TURBINES_COMMON_PROPERTIES.includes(attribute1) && (!attribute2 || TURBINES_COMMON_PROPERTIES.includes(attribute2))) {
       // Si ces attributs sont les seuls dans les attributs partagés
       if (dataFetcher[hydraulicID].all.length === 1 || (attribute2 && dataFetcher[hydraulicID].all.length === 2)) {
         // Si la turbine est la seule dans la centrale
@@ -135,7 +135,7 @@ export function delGraphFromFetcher(dataFetcher, hydraulicID, turbineID, attribu
     }
 
     // Si les attributs sont des attributs non partagés
-    else if (!turbineCommonProperties.includes(attribute1) && (!attribute2 || !turbineCommonProperties.includes(attribute2))) {
+    else if (!TURBINES_COMMON_PROPERTIES.includes(attribute1) && (!attribute2 || !TURBINES_COMMON_PROPERTIES.includes(attribute2))) {
       // Si ces attributs sont les seuls dans les attributs non partagés
       if (dataFetcher[hydraulicID][turbineID].length === 1 || (attribute2 && dataFetcher[hydraulicID][turbineID].length === 2)) {
           // Si la turbine est la seule dans la centrale
@@ -174,7 +174,7 @@ export function delGraphFromFetcher(dataFetcher, hydraulicID, turbineID, attribu
       // Si ces attributs ne sont pas les seuls dans les attributs partagés
       } else {
         // Si attribute1 est un attribut paratgé
-        if (turbineCommonProperties.includes(attribute1)) {
+        if (TURBINES_COMMON_PROPERTIES.includes(attribute1)) {
           // Supprimer l'attribut partagé attribute1
           dispatch(delAttribute(hydraulicID, "all", attribute1));
           // Supprimer l'attribut non partagé attribute2 s'il n'est pas nul

@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { addGraph, delGraph } from '../Stores/GraphActions';
-import { fetchData } from '../Stores/DataActions';
 
 class ReduxTester extends React.Component {
 

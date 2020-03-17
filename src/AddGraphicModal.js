@@ -10,24 +10,24 @@ class AddGraphicModal extends React.Component {
 
         this.state = {
             show: this.props.show,
+            hydraulicID: '',
+            turbineID: '',
+            attribute1: '',
+            attribute2: '',
             sizeCheck: 0,
-            hydraulic: '',
-            turbine: null,
-            height: false,
-            energie: false,
+            high: false,
+            power: false,
             position: false,
-            debit: false,
-            attr1: '',
-            attr2: '',
+            debit: false
         }
     }
 
     createTurbinesItems(){
       let items = [];
 
-      if(this.state.hydraulic!== ''){
-        this.props.hydraulicsID[this.state.hydraulic].map((turbineList) => (
-          items.push(<option value={turbineList}>{turbineList}</option>)
+      if(this.state.hydraulicID!== ''){
+        this.props.hydraulicsID[this.state.hydraulicID].map((turbineList, index) => (
+          items.push(<option key={index} value={turbineList}>{turbineList}</option>)
         ))
       }
 
@@ -37,34 +37,33 @@ class AddGraphicModal extends React.Component {
       createHydraulicItems = () => {
 
         let items = [];
-        Object.keys(this.props.hydraulicsID).map((hydraulic) => (
-            items.push(<option value={hydraulic}>{hydraulic}</option>)
+        Object.keys(this.props.hydraulicsID).map((hydraulicID, index) => (
+            items.push(<option key={index} value={hydraulicID}>{hydraulicID}</option>)
         ))
 
         return items;
       }
 
     handleChangeHydraulic = (event) => {
-
         this.setState({
-            hydraulic: event.target.value
+            hydraulicID: event.target.value
         })
     }
 
     handleChangeTurbine = (event) => {
         this.setState({
-            turbine: event.target.value
+            turbineID: event.target.value
         })
     }
 
     handleChangeHeight = (event) => {
-        if(this.state.sizeCheck<2 || this.state.height){
+        if(this.state.sizeCheck<2 || this.state.high){
             this.setState({
-                height:  this.refs.height.checked,
-                height: !this.state.height,
-                attr1: !this.state.height ? 'height' : '',
-                attr2: (!this.state.height && this.state.attr1!=='') ? 'height' : '',
-                sizeCheck: this.state.height ? (this.state.sizeCheck-1) : (this.state.sizeCheck+1),
+                high:  this.refs.high.checked,
+                high: !this.state.high,
+                attribute1: !this.state.high ? 'high' : '',
+                attribute2: (!this.state.high && this.state.attribute1!=='') ? 'high' : '',
+                sizeCheck: this.state.high ? (this.state.sizeCheck-1) : (this.state.sizeCheck+1),
             })
         }
 
@@ -75,8 +74,8 @@ class AddGraphicModal extends React.Component {
             this.setState({
                 position: this.refs.position.checked,
                 position: !this.state.position,
-                attr1: !this.state.position ? 'position' : '',
-                attr2: (!this.state.position && this.state.attr1!=='') ? 'position' : '',
+                attribute1: !this.state.position ? 'position' : '',
+                attribute2: (!this.state.position && this.state.attribute1!=='') ? 'position' : '',
                 sizeCheck: this.state.position ? (this.state.sizeCheck-1) : (this.state.sizeCheck+1),
             })
         }
@@ -84,13 +83,13 @@ class AddGraphicModal extends React.Component {
     }
 
     handleChangeEnergie = (event) => {
-        if(this.state.sizeCheck<2 || this.state.energie){
+        if(this.state.sizeCheck<2 || this.state.power){
             this.setState({
-                energie: this.refs.energie.checked,
-                energie: !this.state.energie,
-                attr1: !this.state.energie ? 'energie' : '',
-                attr2: (!this.state.energie && this.state.attr1!=='') ? 'energie' : '',
-                sizeCheck: this.state.energie ? (this.state.sizeCheck-1) : (this.state.sizeCheck+1),
+                power: this.refs.power.checked,
+                power: !this.state.power,
+                attribute1: !this.state.power ? 'power' : '',
+                attribute2: (!this.state.power && this.state.attribute1!=='') ? 'power' : '',
+                sizeCheck: this.state.power ? (this.state.sizeCheck-1) : (this.state.sizeCheck+1),
             })
         }
 
@@ -101,8 +100,8 @@ class AddGraphicModal extends React.Component {
             this.setState({
                 debit:  this.refs.debit.checked,
                 debit: !this.state.debit,
-                attr1: !this.state.debit ? 'debit' : '',
-                attr2: (!this.state.debit && this.state.attr1!=='') ? 'debit' : '',
+                attribute1: !this.state.debit ? 'debit' : '',
+                attribute2: (!this.state.debit && this.state.attribute1!=='') ? 'debit' : '',
                 sizeCheck: this.state.debit ? (this.state.sizeCheck-1) : (this.state.sizeCheck+1),
             })
         }
@@ -146,7 +145,11 @@ class AddGraphicModal extends React.Component {
                   <Form.Label>Centrales</Form.Label>
                   <Form.Control as="select" onChange={this.handleChangeHydraulic}>
                     <option value=''>Choisissez une centrale</option>
-                    {this.createHydraulicItems()}
+                    {
+                      Object.keys(this.props.hydraulicsID).map((hydraulicID, index) => {
+                          return <option key={index} value={hydraulicID}>{hydraulicID}</option>;
+                      })
+                    }
                   </Form.Control>
                 </Form.Group>
                 <Form.Group controlId="exampleForm.ControlSelect1">
@@ -160,7 +163,7 @@ class AddGraphicModal extends React.Component {
                     <Form.Group className="check-box-param">
 
                       <div key={`inline-checkbox`} className="mb-2">
-                        <Form.Check label="Hauteur de chutte" ref='height' value={this.state.height} onChange={this.handleChangeHeight} disabled={this.state.sizeCheck>=2 && !this.state.height}/>
+                        <Form.Check label="Hauteur de chute" ref='high' value={this.state.high} onChange={this.handleChangeHeight} disabled={this.state.sizeCheck>=2 && !this.state.high}/>
                         <Form.Check label="Position des pâles" ref='position' value={this.state.position} onChange={this.handleChangePosition} disabled={this.state.sizeCheck>=2 && !this.state.position}/>
 
                       </div>
@@ -168,7 +171,7 @@ class AddGraphicModal extends React.Component {
                     <Form.Group className="check-box-param">
                       <div key={`inline-checkbox`} className="mb-2">
                         <Form.Check label="Débit" ref='debit'  value={this.state.debit} onChange={this.handleChangeDebit} disabled={this.state.sizeCheck>=2 && !this.state.debit}/>
-                        <Form.Check label="Energie" ref='energie' value={this.state.energie} onChange={this.handleChangeEnergie} disabled={this.state.sizeCheck>=2 && !this.state.energie}/>
+                        <Form.Check label="Energie" ref='power' value={this.state.power} onChange={this.handleChangeEnergie} disabled={this.state.sizeCheck>=2 && !this.state.power}/>
                       </div>
                     </Form.Group>
                   </Form.Row>
