@@ -21,27 +21,35 @@ class Graph extends React.Component{
         // add new graph
         // this.addGraph(graphs, data, dataFetcher, hydraulicID, turbineID, attribute1);
 
-        this.state= {
-            id: props.index,
+        this.state = {
             options: this.configOptions(),
             type: this.getType(),
             attribute1: {
-              turbineID: TURBINES_COMMON_PROPERTIES.includes(this.props.attribute1) ? "all" : this.props.turbineID,
-              value: this.props.attribute1
+                turbineID: TURBINES_COMMON_PROPERTIES.includes(this.props.attribute1) ? "all" : this.props.turbineID,
+                value: this.props.attribute1
             }
-        }
+        };
+
+        /*        this.state = {
+                    ...this.state,
+                    attribute2: {
+                        turbineID: 'Groupe1',
+                        value: 'power'
+                    }
+                }*/
 
         if (this.props.attribute2) {
-          this.state = {
-            ...this.state,
-            attribute2: {
-              turbineID: TURBINES_COMMON_PROPERTIES.includes(this.props.attribute2) ? "all" : this.props.turbineID,
-              value: this.props.attribute2
+            this.state = {
+                ...this.state,
+                attribute2: {
+                    turbineID: TURBINES_COMMON_PROPERTIES.includes(this.props.attribute2) ? "all" : this.props.turbineID,
+                    value: this.props.attribute2
+                }
             }
-          }
         }
 
     }
+
 
     getDataFromStore(){
       return {
@@ -118,42 +126,6 @@ class Graph extends React.Component{
 
     }
 
-    constructor(props) {
-        super(props);
-
-        // let { graphs, data, dataFetcher, hydraulicID, turbineID, attribute1 } = this.props;
-
-        // add new graph
-        // this.addGraph(graphs, data, dataFetcher, hydraulicID, turbineID, attribute1);
-
-        this.state = {
-            options: this.configOptions(),
-            type: this.getType(),
-            attribute1: {
-                turbineID: TURBINES_COMMON_PROPERTIES.includes(this.props.attribute1) ? "all" : this.props.turbineID,
-                value: this.props.attribute1
-            }
-        };
-
-/*        this.state = {
-            ...this.state,
-            attribute2: {
-                turbineID: 'Groupe1',
-                value: 'power'
-            }
-        }*/
-
-        if (this.props.attribute2) {
-          this.state = {
-            ...this.state,
-            attribute2: {
-              turbineID: TURBINES_COMMON_PROPERTIES.includes(this.props.attribute2) ? "all" : this.props.turbineID,
-              value: this.props.attribute2
-            }
-          }
-        }
-
-    }
 
     static defaultProps = {
         title: {},
