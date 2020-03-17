@@ -7,12 +7,11 @@ class Accordion extends React.Component {
 
     constructor(props) {
         super(props);
+        console.log('*****************'+props.graph);
         this.state = {
             folded : true,
             name: props.hydraulic,
-            turbine: props.turbine,
-            attr1: props.attr1,
-            attr2: props.attr2,
+            graph: props.graph,
             id: props.index,
             size: 0,
             turbineList: [],
@@ -37,10 +36,9 @@ class Accordion extends React.Component {
         
         turbineList.push({
             id: this.state.size,
-            name: this.state.turbine,
+            //name: this.state.turbine,
             hydraulic: this.state.name,
-            attr1: this.state.attr1,
-            attr2: this.state.attr2,
+            graph: this.state.graph,
         });
 
         this.setState({
@@ -74,9 +72,7 @@ class Accordion extends React.Component {
                         <Turbine
                             index={turbine.id}
                             hydraulic={turbine.hydraulic}
-                            name={turbine.name}
-                            attr1={turbine.attr1}
-                            attr2={turbine.attr2}
+                            graph={turbine.graph}
                             key={turbine.id}
                             onDelete={this.deleteTurbine}
                         />

@@ -1,17 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { fetchCatalog } from './CatalogActions';
 import  Accordion  from './Accordion';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import AddIcon from '@material-ui/icons/Add'
 import {Button} from 'react-bootstrap'
 import AddGraphicModal from './AddGraphicModal'
-
-const DATA = {
-  "central 1" : ["turbine 11", "turbine 12", "turbine 13"],
-  "central 2" : ["turbine 11", "turbine 12", "turbine 13"],
-  "central 3" : ["turbine 11", "turbine 12", "turbine 13"],
-}
 
 class Hydraulics extends React.Component {
 
@@ -55,16 +47,24 @@ addAccordion(hydraulic, turbine, attr1, attr2){
                         this.state.accordions.filter(accordion => accordion.hydraulic === hydraulic) :
                         this.state.accordions;
     console.log(accordions);
+    const listAccordions = this.state.accordions;
+    if(this.state.size>0){
+      listAccordions.pop(accordions);
+    }
     accordions.push({
-      id: this.state.size,
+      id: accordions.id,
       hydraulic: hydraulic,
-      turbine: turbine,
-      attr1: attr1,
-      attr2: attr2,
+      graph: {
+        turbine: turbine,
+        attr1: attr1,
+        attr2: attr2,
+      }
+      
     });
+    listAccordions.push(accordions);
     //console.log(accordions);
     this.setState({
-        accordions: accordions,
+        accordions: listAccordions,
         size: (this.state.size+1),
     });
 }
@@ -79,11 +79,34 @@ handleDeleteAccordions = index =>{
 }
 
 handleSubmit = (form) => {
-  
+  let attr1 = '';
+  let attr2 = '';
   if(form.height){
-    
+    attr1='hauteur';
   }
-  this.addAccordion(form.hydraulic, form.turbine, 'x', 'y');
+  if(form.position){
+    if(attr1 === ''){
+      attr1 = 'position';
+    }else{
+      attr2 = 'position';
+    }
+  }
+  if(form.energie){
+    if(attr1 === ''){
+      attr1 = 'energie';
+    }else{
+      attr2 = 'energie';
+    }
+  }
+  if(form.debit){
+    if(attr1 === ''){
+      attr1 = 'debit';
+    }else{
+      attr2 = 'debit';
+    }
+  }
+  
+  this.addAccordion(form.hydraulic, form.turbine, attr1, attr2);
 }
 
 render() {
@@ -128,15 +151,10 @@ render() {
                     hydraulic={accordion.hydraulic}
                     index={accordion.id}
                     key={accordion.id}
-                    turbine={accordion.turbine}
-                    attr1={accordion.attr1}
-                    attr2={accordion.attr2}
+                    graph={accordion.graph}
                     onDelete={this.handleDeleteAccordions}
                   />
-                
-              )
-                
-              ) 
+              )) 
             }
             {
               this.state.show && //AddAccordion

@@ -10,7 +10,9 @@ class Turbine extends React.Component {
             name: props.name,
             id: props.index,
             hydraulic: props.hydraulic,
-            turbine: props.turbine,
+            graph: props.graph,
+            //attr1: props.attr1,
+            //attr2: props.attr2,
         }
     }
 
@@ -18,19 +20,17 @@ class Turbine extends React.Component {
         this.props.deleteTurbine(index);
     }
 
-
-
     render() {
-        
+        console.log('+++++++++++++++'+ this.state.graph);
         return (
             <div className="mainAccordion" key={this.state.id}>
                 
                 <div className="graphe">
                     <span className="grapheContainer">
-                        <h4>{this.state.name}</h4> 
+                        <h4>{this.state.graph.turbine}</h4> 
                         <Graph 
                             hydraulicID={this.state.hydraulic} 
-                            turbineID={this.state.turbine} 
+                            turbineID={this.state.graph.turbine} 
                             attribute="debit"
                         />
                     </span>
