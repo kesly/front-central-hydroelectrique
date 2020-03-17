@@ -60,7 +60,7 @@ class Hydraulics extends React.Component {
   handleSubmit = (form) => {
     const { graphs, data, dataFetcher } = this.props;
     const { hydraulicID, turbineID, attribute1, attribute2 } = form;
-
+    console.log(attribute1 +' ******* '+attribute2);
     this.addGraph(graphs, data, dataFetcher, hydraulicID, turbineID, attribute1, attribute2 );
   }
 
