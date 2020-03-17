@@ -17,16 +17,14 @@ class Turbine extends React.Component {
         this.props.deleteTurbine(index);
     }
 
-
-
     render() {
-        
+        console.log('+++++++++++++++'+ this.state.graph);
         return (
             <div className="mainAccordion" key={this.state.id}>
                 
                 <div className="graphe">
                     <span className="grapheContainer">
-                        <h4>{this.state.name}</h4> 
+                        <h4>{this.state.graph.turbine}</h4> 
                         <Graph 
                             hydraulicID={this.state.hydraulic} 
                             turbineID={this.state.name}

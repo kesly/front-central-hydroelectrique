@@ -29,17 +29,18 @@ export const fetchDataError = (hydraulicID, turbineID, attribute, error) => ({
   data: { error }
 });
 
-export function fetchData(hydraulicID, turbineID, attribute, lastData) {
+export function fetchData(hydraulicID, turbineID, attribute) {
 
   const attributeForURL = {
-    debit: "Debit1",
-    power: "Puissance1",
-    high: "Elevation"
+    debit: "Debit",
+    power: "Puissance",
+    high: "HauteurChute",
+    position: "Position"
   }
 
   return (dispatch) => {
     dispatch(fetchDataBegin(hydraulicID, turbineID, attribute));
-    return fetch(`/test-data?hydraulicID=${hydraulicID}&turbineID=${turbineID}&attribute=${attributeForURL[attribute]}&begin=${lastData}&end=${lastData + 1}`)
+    return fetch(`/current-data?hydraulic=${hydraulicID}&turbine=${turbineID}&attribute=${attributeForURL[attribute]}`)
       .then((res) => { return res.json() })
       .then((json) => {
         dispatch(fetchDataSuccess(hydraulicID, turbineID, attribute, json.data));

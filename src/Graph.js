@@ -4,17 +4,47 @@ import {Scatter, Line} from 'react-chartjs-2';
 import {connect} from 'react-redux';
 import {TURBINES_COMMON_PROPERTIES} from "./Stores/GraphActions";
 import PropTypes from 'prop-types';
+import { Button} from 'react-bootstrap'
 
-class Graph extends React.Component {
+class Graph extends React.Component{
 
 
     // addGraph = (graphs, data, dataFetcher, hydraulicID, turbineID, attribute1, attribute2 = null) => {
     //     this.props.addGraph(graphs, data, dataFetcher, hydraulicID, turbineID, attribute1, attribute2);
     // };
 
+    constructor(props) {
+        super(props);
 
-    getDataFromStore() {
-        return {
+        // let { graphs, data, dataFetcher, hydraulicID, turbineID, attribute1 } = this.props;
+
+        // add new graph
+        // this.addGraph(graphs, data, dataFetcher, hydraulicID, turbineID, attribute1);
+
+        this.state= {
+            id: props.index,
+            options: this.configOptions(),
+            type: this.getType(),
+            attribute1: {
+              turbineID: TURBINES_COMMON_PROPERTIES.includes(this.props.attribute1) ? "all" : this.props.turbineID,
+              value: this.props.attribute1
+            }
+        }
+
+        if (this.props.attribute2) {
+          this.state = {
+            ...this.state,
+            attribute2: {
+              turbineID: TURBINES_COMMON_PROPERTIES.includes(this.props.attribute2) ? "all" : this.props.turbineID,
+              value: this.props.attribute2
+            }
+          }
+        }
+
+    }
+
+    getDataFromStore(){
+      return {
             datasets: [{
                 label: 'Scatter Dataset',
                 data: [{
@@ -31,7 +61,7 @@ class Graph extends React.Component {
         };
     }
 
-    getDataDebit() {
+    getDataDebit(){
 
         const {data, hydraulicID, turbineID} = this.props;
         const {attribute1, attribute2} = this.state;
@@ -80,11 +110,11 @@ class Graph extends React.Component {
         }
     }
 
-    getType() {
-        return (this.props.attribute2) ? 'Scatter' : 'Line';
+    getType(){
+        return (this.props.attribute2)?'Scatter':'Line';
     }
 
-    configOptions() {
+    configOptions(){
 
     }
 
@@ -136,26 +166,31 @@ class Graph extends React.Component {
     };
 
 
-    getData2() {
+    getData2(){
         return [20, 10, 30];
     }
 
-    configGraph() {
+    configGraph(){
 
     }
 
     render() {
+        const { data, hydraulicID, turbineID } = this.props;
+        const { attribute1, attribute2 } = this.state;
 
         let graph;
         if (this.state.type === 'Scatter') {
             graph = <Scatter data={this.getDataDebit()} options={this.state.options}/>
-        } else if (this.state.type === 'Line') {
+        } else if (this.state.type === 'Line'){
             graph = <Line data={this.getDataDebit()}/>;
         }
 
-        return (
+        return(
             <div>
                 {graph}
+                <Button variant="danger" onClick={() => this.props.onDelete(hydraulicID, turbineID, attribute1.value, (attribute2 ? attribute2.value : null))}>
+                    Supprimer
+                </Button>
             </div>
         )
     }
