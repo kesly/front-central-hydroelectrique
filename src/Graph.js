@@ -8,11 +8,6 @@ import { Button} from 'react-bootstrap'
 
 class Graph extends React.Component{
 
-
-    // addGraph = (graphs, data, dataFetcher, hydraulicID, turbineID, attribute1, attribute2 = null) => {
-    //     this.props.addGraph(graphs, data, dataFetcher, hydraulicID, turbineID, attribute1, attribute2);
-    // };
-
     constructor(props) {
         super(props);
 
