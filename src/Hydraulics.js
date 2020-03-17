@@ -13,7 +13,7 @@ class Hydraulics extends React.Component {
 
   addGraph = (graphs, data, dataFetcher, hydraulicID, turbineID, attribute1, attribute2 = null) => {
     this.props.dispatch(addGraph(graphs, data, dataFetcher, hydraulicID, turbineID, attribute1, attribute2));
-  }
+  };
 
   constructor(props){
     super(props);
