@@ -1,6 +1,6 @@
 import {
   ADD_HYDRAULIC_TO_FETCHER, ADD_TURBINE_TO_FETCHER, ADD_ATTRIBUTE_TO_FETCHER,
-  DEL_HYDRAULIC, DEL_TURBINE, DEL_ATTRIBUTE
+  DEL_HYDRAULIC_FROM_FETCHER, DEL_TURBINE_FROM_FETCHER, DEL_ATTRIBUTE_FROM_FETCHER
 } from './DataFetcherActions';
 
 export default function dataFetcherReducer(state = {}, action) {
@@ -36,22 +36,21 @@ export default function dataFetcherReducer(state = {}, action) {
         }
       };
 
-    case DEL_HYDRAULIC:
-      let filteredState = Object.keys(state).reduce((dataObj, hydraulicID) => {
+    case DEL_HYDRAULIC_FROM_FETCHER:
+      let filteredState = Object.keys(state).reduce((stateObj, hydraulicID) => {
         if (hydraulicID !== action.hydraulicID) {
           return {
-            ...dataObj,
+            ...stateObj,
             [hydraulicID]: state[hydraulicID]
           };
         } else {
-          return dataObj;
+          return stateObj;
         }
       }, {});
 
       return filteredState;
 
-    case DEL_TURBINE:
-    // Pas bien fait quand hydraulic est vide
+    case DEL_TURBINE_FROM_FETCHER:
       let filteredHydraulic = Object.keys(state[action.hydraulicID]).reduce((hydraulicObj, turbineID) => {
         if (turbineID !== action.turbineID) {
           return {
@@ -66,9 +65,9 @@ export default function dataFetcherReducer(state = {}, action) {
       return {
         ...state,
         [action.hydraulicID]: filteredHydraulic
-      }
+      };
 
-    case DEL_ATTRIBUTE:
+    case DEL_ATTRIBUTE_FROM_FETCHER:
       let filteredTurbine = state[action.hydraulicID][action.turbineID].filter((turbineObj, attribute) => {
         return state[action.hydraulicID][action.turbineID][attribute] !== action.attribute;
       });
@@ -79,7 +78,7 @@ export default function dataFetcherReducer(state = {}, action) {
           ...state[action.hydraulicID],
           [action.turbineID]: filteredTurbine
         }
-      }
+      };
 
     default:
       return state;

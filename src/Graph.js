@@ -2,30 +2,46 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import React from "react";
 import {  Scatter, Line } from 'react-chartjs-2';
 import { connect } from 'react-redux';
-import { addGraph, delHydraulic, delTurbine } from './Stores/DataFetcherActions';
-import { fetchData } from './Stores/DataActions';
-import PropTypes from 'prop-types'
+import { TURBINES_COMMON_PROPERTIES } from "./Stores/GraphActions";
+import PropTypes from 'prop-types';
+import { Button} from 'react-bootstrap'
 
 class Graph extends React.Component{
 
 
-    addGraph = (data, dataFetcher, hydraulicID, turbineID, attribute1, attribute2 = null) => {
-        this.props.addGraph(data, dataFetcher, hydraulicID, turbineID, attribute1, attribute2);
-    };
+    // addGraph = (graphs, data, dataFetcher, hydraulicID, turbineID, attribute1, attribute2 = null) => {
+    //     this.props.addGraph(graphs, data, dataFetcher, hydraulicID, turbineID, attribute1, attribute2);
+    // };
 
-    delHydraulic = (hydraulicID) => {
-        this.props.delHydraulic(hydraulicID);
-    };
+    constructor(props) {
+        super(props);
 
-    delTurbine = (hydraulicID, turbineID) => {
-        this.props.delTurbine(hydraulicID, turbineID);
-    };
+        // let { graphs, data, dataFetcher, hydraulicID, turbineID, attribute1 } = this.props;
 
-    fetchData = (hydraulicID, turbineID, attribute, lastData) => {
-        this.props.fetchData(hydraulicID, turbineID, attribute, lastData);
-    };
+        // add new graph
+        // this.addGraph(graphs, data, dataFetcher, hydraulicID, turbineID, attribute1);
 
+        this.state= {
+            id: props.index,
+            options: this.configOptions(),
+            type: this.getType(),
+            attribute1: {
+              turbineID: TURBINES_COMMON_PROPERTIES.includes(this.props.attribute1) ? "all" : this.props.turbineID,
+              value: this.props.attribute1
+            }
+        }
 
+        if (this.props.attribute2) {
+          this.state = {
+            ...this.state,
+            attribute2: {
+              turbineID: TURBINES_COMMON_PROPERTIES.includes(this.props.attribute2) ? "all" : this.props.turbineID,
+              value: this.props.attribute2
+            }
+          }
+        }
+
+    }
 
     getDataFromStore(){
       return {
@@ -47,13 +63,14 @@ class Graph extends React.Component{
 
     getDataDebit(){
 
-        const {data, hydraulicID, turbineID, attribute} = this.props;
-
+        const { data, hydraulicID, turbineID } = this.props;
+        const { attribute1, attribute2 } = this.state;
+        
         return {
-            labels: Object.keys(data).length!==0?[...Object.keys(data[hydraulicID][turbineID][attribute].data)]: [],
+            labels: Object.keys(data).length!==0?[...Object.keys(data[hydraulicID][attribute1.turbineID][attribute1.value].data)]: [],
             datasets: [
                 {
-                    label: `${hydraulicID} - ${turbineID} - ${attribute}` ,
+                    label: `${hydraulicID} - ${turbineID} - ${attribute1}` ,
                     fill: false,
                     lineTension: 0.1,
                     backgroundColor: 'rgba(75,192,192,0.4)',
@@ -71,7 +88,7 @@ class Graph extends React.Component{
                     pointHoverBorderWidth: 2,
                     pointRadius: 1,
                     pointHitRadius: 10,
-                    data: Object.keys(data).length!==0?[...Object.values(data[hydraulicID][turbineID][attribute].data)]: []
+                    data: Object.keys(data).length!==0?[...Object.values(data[hydraulicID][attribute1.turbineID][attribute1.value].data)]: []
                 }
             ]
         };
@@ -82,19 +99,6 @@ class Graph extends React.Component{
     }
 
     configOptions(){
-
-    }
-
-    constructor(props) {
-        super(props);
-        // add new graph
-        this.addGraph(this.props.data, this.props.dataFetcher, this.props.hydraulicID, this.props.turbineID,  this.props.attribute);
-
-        this.state= {
-
-            options: this.configOptions(),
-            type: this.getType(),
-        }
 
     }
 
@@ -129,6 +133,9 @@ class Graph extends React.Component{
         return(
             <div>
                 {graph}
+                <Button variant="danger" onClick={() => this.props.onDelete(this.props.hydraulicID, this.props.turbineID, this.state.attribute1, this.state.attribute2)}>
+                    Supprimer
+                </Button>
             </div>
         )
     }
@@ -136,9 +143,10 @@ class Graph extends React.Component{
 
 const mapStateToProps = (state) => ({
     data: state.data,
-    dataFetcher: state.dataFetcher
+    // dataFetcher: state.dataFetcher,
+    // graphs: state.graphs
 });
 
-const mapDispatchToProps = { addGraph, delHydraulic, delTurbine, fetchData };
+// const mapDispatchToProps = { addGraph };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Graph);
+export default connect(mapStateToProps/* , mapDispatchToProps */)(Graph);
