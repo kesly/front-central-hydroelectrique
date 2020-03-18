@@ -8,6 +8,8 @@ const attributeInitialState = {
 }
 
 export default function dataReducer(state = {}, action) {
+  console.log("==================================================================================")
+  console.log("DataReducer", action, state)
 
   switch (action.type) {
 
@@ -67,7 +69,7 @@ export default function dataReducer(state = {}, action) {
               ...state[action.hydraulicID][action.turbineID][action.attribute],
               data: {
                 ...state[action.hydraulicID][action.turbineID][action.attribute].data,
-                ...action.data.data
+                ...action.data
               },
               loading: false
             }

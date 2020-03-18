@@ -139,7 +139,6 @@ class AddGraphicModal extends React.Component {
     }
 
     render() {
-        //
         return (
             <Modal show={this.state.show} onHide={this.handleClose}>
             <Modal.Header >
@@ -193,7 +192,6 @@ class AddGraphicModal extends React.Component {
               </Button>
             </Modal.Footer>
           </Modal>
-
         );
     }
 

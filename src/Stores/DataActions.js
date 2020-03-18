@@ -18,7 +18,7 @@ export const fetchDataSuccess = (hydraulicID, turbineID, attribute, data) => ({
   hydraulicID,
   turbineID,
   attribute,
-  data: { data }
+  data
 });
 
 export const fetchDataError = (hydraulicID, turbineID, attribute, error) => ({
@@ -43,7 +43,8 @@ export function fetchData(hydraulicID, turbineID, attribute) {
     return fetch(`/current-data?hydraulic=${hydraulicID}&turbine=${turbineID}&attribute=${attributeForURL[attribute]}`)
       .then((res) => { return res.json() })
       .then((json) => {
-        dispatch(fetchDataSuccess(hydraulicID, turbineID, attribute, json.data));
+        let dataObject = { [json.content.date]: json.content.value };
+        dispatch(fetchDataSuccess(hydraulicID, turbineID, attribute, dataObject));
         return json.data;
       })
       .catch(error => dispatch(fetchDataError(hydraulicID, turbineID, attribute, error)));

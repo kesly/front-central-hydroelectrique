@@ -1,27 +1,21 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
 import React from "react";
-import {Scatter, Line} from 'react-chartjs-2';
-import {connect} from 'react-redux';
-import {TURBINES_COMMON_PROPERTIES} from "./Stores/GraphActions";
+import { Scatter, Line } from 'react-chartjs-2';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { TURBINES_COMMON_PROPERTIES, delGraph } from './Stores/GraphActions';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button} from 'react-bootstrap'
 
 class Graph extends React.Component{
 
-    
-
-    // addGraph = (graphs, data, dataFetcher, hydraulicID, turbineID, attribute1, attribute2 = null) => {
-    //     this.props.addGraph(graphs, data, dataFetcher, hydraulicID, turbineID, attribute1, attribute2);
-    // };
+    delGraph = (hydraulicID, turbineID, attribute1, attribute2 = null) => {
+      let { graphs, dataFetcher } = this.props;
+      this.props.dispatch(delGraph(graphs, dataFetcher, hydraulicID, turbineID, attribute1, attribute2));
+    }
 
     constructor(props) {
         super(props);
 
-        // let { graphs, data, dataFetcher, hydraulicID, turbineID, attribute1 } = this.props;
-
-        // add new graph
-        // this.addGraph(graphs, data, dataFetcher, hydraulicID, turbineID, attribute1);
-        console.log("Attribute 1 : "+ this.props.attribute1);
         this.state = {
             options: this.configOptions(),
             type: this.getType(),
@@ -30,14 +24,6 @@ class Graph extends React.Component{
                 value: this.props.attribute1
             }
         };
-        console.log("Attribute 1 : "+ this.state.attribute1.value);
-        /*        this.state = {
-                    ...this.state,
-                    attribute2: {
-                        turbineID: 'Groupe1',
-                        value: 'power'
-                    }
-                }*/
 
         if (this.props.attribute2) {
             this.state = {
@@ -89,12 +75,11 @@ class Graph extends React.Component{
             }
         } else {
 
-            console.log(data);
             return {
-                labels: Object.keys(data).length !== 0 ? [...Object.keys(data[hydraulicID][attribute1.turbineID][attribute1.value].data)] : [],
+                labels: Object.keys(data).length?[...Object.keys(data[hydraulicID][attribute1.turbineID][attribute1.value].data)]: [],
                 datasets: [
                     {
-                        label: `${hydraulicID} - ${turbineID} - ${attribute1.value}`,
+                        label: `${hydraulicID} - ${turbineID} - ${attribute1.value}` ,
                         fill: false,
                         lineTension: 0.1,
                         backgroundColor: 'rgba(75,192,192,0.4)',
@@ -112,7 +97,7 @@ class Graph extends React.Component{
                         pointHoverBorderWidth: 2,
                         pointRadius: 1,
                         pointHitRadius: 10,
-                        data: Object.keys(data).length !== 0 ? [...Object.values(data[hydraulicID][attribute1.turbineID][attribute1.value].data)] : []
+                        data: Object.keys(data).length?[...Object.values(data[hydraulicID][attribute1.turbineID][attribute1.value].data)]: []
                     }
                 ]
             };
@@ -161,7 +146,7 @@ class Graph extends React.Component{
         return(
             <div>
                 {graph}
-                <Button variant="danger" onClick={() => this.props.onDelete(hydraulicID, turbineID, attribute1.value, (attribute2 ? attribute2.value : null))}>
+                <Button variant="danger" onClick={() => this.delGraph(hydraulicID, turbineID, attribute1.value, (attribute2 ? attribute2.value : null))}>
                     Supprimer
                 </Button>
             </div>
@@ -170,11 +155,9 @@ class Graph extends React.Component{
 }
 
 const mapStateToProps = (state) => ({
+    graphs: state.graphs,
     data: state.data,
-    // dataFetcher: state.dataFetcher,
-    // graphs: state.graphs
+    dataFetcher: state.dataFetcher
 });
 
-// const mapDispatchToProps = { addGraph };
-
-export default connect(mapStateToProps/* , mapDispatchToProps */)(Graph);
+export default connect(mapStateToProps)(Graph);
