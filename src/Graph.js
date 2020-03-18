@@ -1,12 +1,17 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
 import React from "react";
-import {Scatter, Line} from 'react-chartjs-2';
-import {connect} from 'react-redux';
-import {TURBINES_COMMON_PROPERTIES} from "./Stores/GraphActions";
+import { Scatter, Line } from 'react-chartjs-2';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { TURBINES_COMMON_PROPERTIES, delGraph } from './Stores/GraphActions';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button} from 'react-bootstrap'
 
 class Graph extends React.Component{
+
+    delGraph = (hydraulicID, turbineID, attribute1, attribute2 = null) => {
+      let { graphs, dataFetcher } = this.props;
+      this.props.dispatch(delGraph(graphs, dataFetcher, hydraulicID, turbineID, attribute1, attribute2));
+    }
 
     constructor(props) {
         super(props);
@@ -141,7 +146,7 @@ class Graph extends React.Component{
         return(
             <div>
                 {graph}
-                <Button variant="danger" onClick={() => this.props.onDelete(hydraulicID, turbineID, attribute1.value, (attribute2 ? attribute2.value : null))}>
+                <Button variant="danger" onClick={() => this.delGraph(hydraulicID, turbineID, attribute1.value, (attribute2 ? attribute2.value : null))}>
                     Supprimer
                 </Button>
             </div>
@@ -150,7 +155,9 @@ class Graph extends React.Component{
 }
 
 const mapStateToProps = (state) => ({
-    data: state.data
+    graphs: state.graphs,
+    data: state.data,
+    dataFetcher: state.dataFetcher
 });
 
 export default connect(mapStateToProps)(Graph);

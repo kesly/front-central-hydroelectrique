@@ -161,7 +161,7 @@ class AddGraphicModal extends React.Component {
         event.preventDefault();
     }
 
-    render() {console.log(this.state)
+    render() {
         return (
             <Modal show={this.state.show} onHide={this.handleClose}>
             <Modal.Header >

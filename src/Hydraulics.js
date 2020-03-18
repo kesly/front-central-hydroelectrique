@@ -5,17 +5,13 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import {Button} from 'react-bootstrap';
 import AddGraphicModal from './AddGraphicModal';
 import Graph from './Graph';
-import { addGraph, delGraph } from './Stores/GraphActions';
+import { addGraph } from './Stores/GraphActions';
 
 class Hydraulics extends React.Component {
 
   addGraph = (graphs, data, dataFetcher, hydraulicID, turbineID, attribute1, attribute2 = null) => {
     this.props.dispatch(addGraph(graphs, data, dataFetcher, hydraulicID, turbineID, attribute1, attribute2));
   };
-
-  delGraph = (graphs, dataFetcher, hydraulicID, turbineID, attribute1, attribute2 = null) => {
-    this.props.dispatch(delGraph(graphs, dataFetcher, hydraulicID, turbineID, attribute1, attribute2));
-  }
 
   constructor(props){
     super(props);
@@ -57,11 +53,6 @@ class Hydraulics extends React.Component {
     this.addGraph(graphs, data, dataFetcher, hydraulicID, turbineID, attribute1, attribute2);
   }
 
-  deleteGraph = (hydraulicID, turbineID, attribute1, attribute2) => {
-    const { graphs, dataFetcher } = this.props;
-    this.delGraph(graphs, dataFetcher, hydraulicID, turbineID, attribute1, attribute2 = null)
-  }
-
   render() {
     const { graphs } = this.props;
 
@@ -80,7 +71,6 @@ class Hydraulics extends React.Component {
                                     turbineID={ graphParameters.turbineID }
                                     attribute1={ graphParameters.attribute1 }
                                     attribute2={ graphParameters.attribute2 }
-                                    onDelete={ this.deleteGraph }
                       />;
                     })
                   }
