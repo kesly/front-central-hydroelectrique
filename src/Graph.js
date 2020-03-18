@@ -8,18 +8,8 @@ import { Button} from 'react-bootstrap'
 
 class Graph extends React.Component{
 
-
-    // addGraph = (graphs, data, dataFetcher, hydraulicID, turbineID, attribute1, attribute2 = null) => {
-    //     this.props.addGraph(graphs, data, dataFetcher, hydraulicID, turbineID, attribute1, attribute2);
-    // };
-
     constructor(props) {
         super(props);
-
-        // let { graphs, data, dataFetcher, hydraulicID, turbineID, attribute1 } = this.props;
-
-        // add new graph
-        // this.addGraph(graphs, data, dataFetcher, hydraulicID, turbineID, attribute1);
 
         this.state = {
             options: this.configOptions(),
@@ -29,14 +19,6 @@ class Graph extends React.Component{
                 value: this.props.attribute1
             }
         };
-
-        /*        this.state = {
-                    ...this.state,
-                    attribute2: {
-                        turbineID: 'Groupe1',
-                        value: 'power'
-                    }
-                }*/
 
         if (this.props.attribute2) {
             this.state = {
@@ -73,7 +55,7 @@ class Graph extends React.Component{
 
         const {data, hydraulicID, turbineID} = this.props;
         const {attribute1, attribute2} = this.state;
-        
+
         if (this.props.attribute2) {
             let twoData = [];
             for (const timestamp in data[hydraulicID][attribute1.turbineID][attribute1.value].data) {
@@ -169,11 +151,7 @@ class Graph extends React.Component{
 }
 
 const mapStateToProps = (state) => ({
-    data: state.data,
-    // dataFetcher: state.dataFetcher,
-    // graphs: state.graphs
+    data: state.data
 });
 
-// const mapDispatchToProps = { addGraph };
-
-export default connect(mapStateToProps/* , mapDispatchToProps */)(Graph);
+export default connect(mapStateToProps)(Graph);
