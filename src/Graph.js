@@ -70,7 +70,7 @@ class Graph extends React.Component{
             labels: Object.keys(data).length!==0?[...Object.keys(data[hydraulicID][attribute1.turbineID][attribute1.value].data)]: [],
             datasets: [
                 {
-                    label: `${hydraulicID} - ${turbineID} - ${attribute1}` ,
+                    label: `${hydraulicID} - ${turbineID} - ${attribute1.value}` ,
                     fill: false,
                     lineTension: 0.1,
                     backgroundColor: 'rgba(75,192,192,0.4)',

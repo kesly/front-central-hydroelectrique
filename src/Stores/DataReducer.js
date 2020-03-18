@@ -67,7 +67,7 @@ export default function dataReducer(state = {}, action) {
               ...state[action.hydraulicID][action.turbineID][action.attribute],
               data: {
                 ...state[action.hydraulicID][action.turbineID][action.attribute].data,
-                ...action.data.data
+                ...action.data
               },
               loading: false
             }

@@ -24,7 +24,7 @@ class AppDiv extends React.Component {
     });
 
     // Récupère les données une nouvelle fois dans 1000 millisecondes
-    // setTimeout(() => this.runDataFetcher(), 1000);
+    setTimeout(() => this.runDataFetcher(), 1000);
   }
 
   componentDidMount() {
