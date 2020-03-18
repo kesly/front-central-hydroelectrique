@@ -70,7 +70,6 @@ class Graph extends React.Component{
             }
         } else {
 
-            console.log(data);
             return {
                 labels: Object.keys(data).length?[...Object.keys(data[hydraulicID][attribute1.turbineID][attribute1.value].data)]: [],
                 datasets: [

@@ -34,8 +34,7 @@ class AddGraphicModal extends React.Component {
       return items;
     }
 
-      createHydraulicItems = () => {
-
+    createHydraulicItems = () => {
         let items = [];
         Object.keys(this.props.hydraulicsID).map((hydraulicID, index) => (
             items.push(<option key={index} value={hydraulicID}>{hydraulicID}</option>)
@@ -57,53 +56,87 @@ class AddGraphicModal extends React.Component {
     }
 
     handleChangeHeight = (event) => {
+      let attribute1 = this.state.attribute1 ? (
+        this.state.attribute1 !== "high" ? this.state.attribute1 : (
+          this.state.attribute2 ? this.state.attribute2 : ""
+        )
+      ) : (
+        !this.state.high ? "high" : ""
+      );
+
+      let attribute2 = (!this.state.high && this.state.attribute1) ? 'high' : '';
+
         if(this.state.sizeCheck<2 || this.state.high){
             this.setState({
                 high: !this.state.high,
-                attribute1: !this.state.high ? 'high' : '',
-                attribute2: (!this.state.high && this.state.attribute1!=='') ? 'high' : '',
+                attribute1,
+                attribute2,
                 sizeCheck: this.state.high ? (this.state.sizeCheck-1) : (this.state.sizeCheck+1),
             })
         }
-
     }
 
     handleChangePosition = (event) => {
+        let attribute1 = this.state.attribute1 ? (
+          this.state.attribute1 !== "position" ? this.state.attribute1 : (
+            this.state.attribute2 ? this.state.attribute2 : ""
+          )
+        ) : (
+          !this.state.position ? "position" : ""
+        );
+
+        let attribute2 = (!this.state.position && this.state.attribute1) ? 'position' : '';
+
         if(this.state.sizeCheck<2 || this.state.position){
             this.setState({
                 position: !this.state.position,
-                attribute1: !this.state.position ? 'position' : '',
-                attribute2: (!this.state.position && this.state.attribute1!=='') ? 'position' : '',
+                attribute1,
+                attribute2,
                 sizeCheck: this.state.position ? (this.state.sizeCheck-1) : (this.state.sizeCheck+1),
             })
         }
-
     }
 
     handleChangeEnergie = (event) => {
+        let attribute1 = this.state.attribute1 ? (
+          this.state.attribute1 !== "power" ? this.state.attribute1 : (
+            this.state.attribute2 ? this.state.attribute2 : ""
+          )
+        ) : (
+          !this.state.power ? "power" : ""
+        );
+
+        let attribute2 = (!this.state.power && this.state.attribute1) ? 'power' : '';
+
         if(this.state.sizeCheck<2 || this.state.power){
             this.setState({
                 power: !this.state.power,
-                attribute1: !this.state.power ? 'power' : '',
-                attribute2: (!this.state.power && this.state.attribute1!=='') ? 'power' : '',
+                attribute1,
+                attribute2,
                 sizeCheck: this.state.power ? (this.state.sizeCheck-1) : (this.state.sizeCheck+1),
             })
         }
-
     }
 
     handleChangeDebit = (event) => {
+        let attribute1 = this.state.attribute1 ? (
+          this.state.attribute1 !== "debit" ? this.state.attribute1 : (
+            this.state.attribute2 ? this.state.attribute2 : ""
+          )
+        ) : (
+          !this.state.debit ? "debit" : ""
+        );
+
+        let attribute2 = (!this.state.debit && this.state.attribute1) ? 'debit' : '';
+
         if(this.state.sizeCheck<2 || this.state.debit){
             this.setState({
                 debit: !this.state.debit,
-                attribute1: !this.state.debit ? 'debit' : '',
-                attribute2: (!this.state.debit && this.state.attribute1!=='') ? 'debit' : '',
+                attribute1,
+                attribute2,
                 sizeCheck: this.state.debit ? (this.state.sizeCheck-1) : (this.state.sizeCheck+1),
             })
         }
-        this.setState({
-            debit:  this.refs.debit.checked
-        })
     }
 
     handleShow = () => {
@@ -128,8 +161,7 @@ class AddGraphicModal extends React.Component {
         event.preventDefault();
     }
 
-    render() {
-        //
+    render() {console.log(this.state)
         return (
             <Modal show={this.state.show} onHide={this.handleClose}>
             <Modal.Header >
@@ -183,7 +215,6 @@ class AddGraphicModal extends React.Component {
               </Button>
             </Modal.Footer>
           </Modal>
-
         );
     }
 
