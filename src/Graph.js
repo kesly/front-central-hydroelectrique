@@ -10,6 +10,48 @@ class Graph extends React.Component{
 
     
 
+    // addGraph = (graphs, data, dataFetcher, hydraulicID, turbineID, attribute1, attribute2 = null) => {
+    //     this.props.addGraph(graphs, data, dataFetcher, hydraulicID, turbineID, attribute1, attribute2);
+    // };
+
+    constructor(props) {
+        super(props);
+
+        // let { graphs, data, dataFetcher, hydraulicID, turbineID, attribute1 } = this.props;
+
+        // add new graph
+        // this.addGraph(graphs, data, dataFetcher, hydraulicID, turbineID, attribute1);
+        console.log("Attribute 1 : "+ this.props.attribute1);
+        this.state = {
+            options: this.configOptions(),
+            type: this.getType(),
+            attribute1: {
+                turbineID: TURBINES_COMMON_PROPERTIES.includes(this.props.attribute1) ? "all" : this.props.turbineID,
+                value: this.props.attribute1
+            }
+        };
+        console.log("Attribute 1 : "+ this.state.attribute1.value);
+        /*        this.state = {
+                    ...this.state,
+                    attribute2: {
+                        turbineID: 'Groupe1',
+                        value: 'power'
+                    }
+                }*/
+
+        if (this.props.attribute2) {
+            this.state = {
+                ...this.state,
+                attribute2: {
+                    turbineID: TURBINES_COMMON_PROPERTIES.includes(this.props.attribute2) ? "all" : this.props.turbineID,
+                    value: this.props.attribute2
+                }
+            }
+        }
+
+    }
+
+
     getDataFromStore(){
       return {
             datasets: [{
@@ -52,7 +94,7 @@ class Graph extends React.Component{
                 labels: Object.keys(data).length !== 0 ? [...Object.keys(data[hydraulicID][attribute1.turbineID][attribute1.value].data)] : [],
                 datasets: [
                     {
-                        label: `${hydraulicID} - ${turbineID} - ${attribute1}`,
+                        label: `${hydraulicID} - ${turbineID} - ${attribute1.value}`,
                         fill: false,
                         lineTension: 0.1,
                         backgroundColor: 'rgba(75,192,192,0.4)',
@@ -85,42 +127,6 @@ class Graph extends React.Component{
 
     }
 
-    constructor(props) {
-        super(props);
-
-        // let { graphs, data, dataFetcher, hydraulicID, turbineID, attribute1 } = this.props;
-
-        // add new graph
-        // this.addGraph(graphs, data, dataFetcher, hydraulicID, turbineID, attribute1);
-
-        this.state = {
-            options: this.configOptions(),
-            type: this.getType(),
-            attribute1: {
-                turbineID: TURBINES_COMMON_PROPERTIES.includes(this.props.attribute1) ? "all" : this.props.turbineID,
-                value: this.props.attribute1
-            }
-        };
-
-/*        this.state = {
-            ...this.state,
-            attribute2: {
-                turbineID: 'Groupe1',
-                value: 'power'
-            }
-        }*/
-
-        if (this.props.attribute2) {
-          this.state = {
-            ...this.state,
-            attribute2: {
-              turbineID: TURBINES_COMMON_PROPERTIES.includes(this.props.attribute2) ? "all" : this.props.turbineID,
-              value: this.props.attribute2
-            }
-          }
-        }
-
-    }
 
     static defaultProps = {
         title: {},
@@ -144,7 +150,7 @@ class Graph extends React.Component{
     render() {
         const { data, hydraulicID, turbineID } = this.props;
         const { attribute1, attribute2 } = this.state;
-
+        console.log(this.getDataDebit());
         let graph;
         if (this.state.type === 'Scatter') {
             graph = <Scatter data={this.getDataDebit()} options={this.state.options}/>
