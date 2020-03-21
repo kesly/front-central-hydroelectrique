@@ -61,6 +61,10 @@ class Graph extends React.Component{
         const {data, hydraulicID, turbineID} = this.props;
         const {attribute1, attribute2} = this.state;
 
+        if(Object.keys(data).length <1){
+            return [];
+        }
+
         if (this.props.attribute2) {
             let dataKeys = Object.keys(data[hydraulicID][attribute1.turbineID][attribute1.value].data);
             let twoData = [];

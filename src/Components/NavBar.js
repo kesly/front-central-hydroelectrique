@@ -1,32 +1,97 @@
-import React from 'react';
+import React, {useState} from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Configuration from "../Configuration";
+import {connect} from "react-redux";
+import Navbar from "react-bootstrap/Navbar";
+import Nav from "react-bootstrap/Nav";
+import NavDropdown from "react-bootstrap/NavDropdown";
+import Form from "react-bootstrap/Form";
+import FormControl from "@material-ui/core/FormControl";
+import Modal from "react-bootstrap/Modal";
+import Button from "react-bootstrap/Button";
+
 
 class NavBar extends React.Component {
 
-  render() {
-    return (
-      <nav className="navbar navbar-expand-sm navbar-light bg-light">
-        <a className="navbar-brand" href="/home">Hydraulics</a>
-        <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span className="navbar-toggler-icon"></span>
-        </button>
+    constructor(props) {
+        super(props);
+        this.state = {
+            show: false,
+        }
 
-        <div className="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul className="navbar-nav mr-auto">
+    }
 
-            <li className="nav-item active">
-              <a className="nav-link" href="/home">Import</a>
-            </li>
+    handleShow = () => {
+        this.setState({show: true});
+    };
 
-            <li className="nav-item">
-              <a className="nav-link" href="/home">Export</a>
-            </li>
+    handleClose = () => {
+        this.setState({show: false});
+    };
 
-          </ul>
-        </div>
-      </nav>
-    );
-  }
+    render() {
+
+        return (
+            <div>
+
+                <Modal show={this.state.show} onHide={this.handleClose}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Modal heading</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <form action="/" encType="multipart/form-data">
+                            <input type="file" id="monBouton"/>
+                        </form>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={this.handleClose}>
+                            Annuler
+                        </Button>
+                        <Button variant="primary" onClick={() => {
+                            Configuration.importConfiguration(this.props.graphs);
+                            this.handleClose();
+                        }}>
+                            Valider
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
+
+                <Navbar bg="light" expand="lg">
+                    <Navbar.Brand href="#home">Hydraulics</Navbar.Brand>
+                    <Navbar.Toggle aria-controls="basic-navbar-nav"/>
+                    <Navbar.Collapse id="basic-navbar-nav">
+                        <Nav className="mr-auto">
+                            <NavDropdown title="Import" id="basic-nav-dropdown">
+                                <NavDropdown.Item href="#action/3.1" onClick={this.handleShow}>Import à partir d'un
+                                    fichier</NavDropdown.Item>
+                                <NavDropdown.Item href="#action/3.2"
+                                                  onClick={() => Object.assign(this.props.graphs, Configuration.restoreConfiration())}>Import
+                                    à
+                                    partir du navigateur</NavDropdown.Item>
+                            </NavDropdown>
+
+                            <NavDropdown title="Export" id="basic-nav-dropdown">
+                                <NavDropdown.Item href="#action/3.1"
+                                                  onClick={() => Configuration.exportConfiration(this.props.graphs)}>Export
+                                    dans un
+                                    fichier</NavDropdown.Item>
+                                <NavDropdown.Item href="#action/3.2"
+                                                  onClick={() => Configuration.saveConfiguration(this.props.graphs)}>Export
+                                    dans
+                                    le
+                                    navigateur</NavDropdown.Item>
+                            </NavDropdown>
+                        </Nav>
+                    </Navbar.Collapse>
+                </Navbar>
+            </div>
+        );
+    }
 
 }
 
-export default NavBar;
+const mapStateToProps = (state) => ({
+    graphs: state.graphs,
+});
+
+export default connect(mapStateToProps)(NavBar);
