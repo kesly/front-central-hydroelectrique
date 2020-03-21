@@ -5,8 +5,8 @@ import thunk from 'redux-thunk';
 
 import rootReducer from './Stores/RootReducer';
 import AppDiv from './Components/AppDiv';
-import NavBar from './Components/NavBar';
 import Hydraulics from './Hydraulics';
+import Configuration from './Configuration';
 
 import 'bootstrap/dist/css/bootstrap.css';
 import './App.css';
@@ -22,8 +22,9 @@ class App extends React.Component {
     return (
       <Provider store={ store }>
         <AppDiv>
-          <NavBar />
-          <Hydraulics />
+          <Configuration>
+            <Hydraulics/>
+          </Configuration>
         </AppDiv>
       </Provider>
     );

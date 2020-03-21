@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { saveAs } from 'file-saver';
 
 import { fetchCatalog } from '../Stores/CatalogActions';
 import { fetchData } from '../Stores/DataActions';
@@ -43,6 +44,7 @@ class AppDiv extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
+  graphs: state.graphs,
   dataFetcher: state.dataFetcher
 });
 

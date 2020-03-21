@@ -38,7 +38,6 @@
 }
 
 .sticky-top-left {
-  z-index: 1020;
   position: fixed;
   top: 75px;
   left: 15px;

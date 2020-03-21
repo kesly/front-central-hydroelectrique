@@ -15,6 +15,7 @@ class NavBar extends React.Component {
 
     constructor(props) {
         super(props);
+
         this.state = {
             show: false,
         }
@@ -35,25 +36,25 @@ class NavBar extends React.Component {
             <div>
 
                 <Modal show={this.state.show} onHide={this.handleClose}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>Modal heading</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <form action="/" encType="multipart/form-data">
-                            <input type="file" id="monBouton"/>
-                        </form>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button variant="secondary" onClick={this.handleClose}>
-                            Annuler
-                        </Button>
-                        <Button variant="primary" onClick={() => {
-                            Configuration.importConfiguration(this.props.graphs);
-                            this.handleClose();
-                        }}>
-                            Valider
-                        </Button>
-                    </Modal.Footer>
+                  <Modal.Header closeButton>
+                    <Modal.Title>Modal heading</Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>
+                    <form action="/" encType="multipart/form-data">
+                      <input type="file" id="importFileSelector"/>
+                    </form>
+                  </Modal.Body>
+                  <Modal.Footer>
+                    <Button variant="secondary" onClick={this.handleClose}>
+                      Annuler
+                    </Button>
+                    <Button variant="primary" onClick={() => {
+                      this.props.onImport();
+                      this.handleClose();
+                    }}>
+                      Valider
+                    </Button>
+                  </Modal.Footer>
                 </Modal>
 
                 <Navbar bg="light" expand="lg">
@@ -62,24 +63,21 @@ class NavBar extends React.Component {
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="mr-auto">
                             <NavDropdown title="Import" id="basic-nav-dropdown">
-                                <NavDropdown.Item href="#action/3.1" onClick={this.handleShow}>Import à partir d'un
-                                    fichier</NavDropdown.Item>
-                                <NavDropdown.Item href="#action/3.2"
-                                                  onClick={() => Object.assign(this.props.graphs, Configuration.restoreConfiration())}>Import
-                                    à
-                                    partir du navigateur</NavDropdown.Item>
+                                <NavDropdown.Item href="#action/3.1" onClick={this.handleShow}>
+                                  Import à partir d'un fichier
+                                  </NavDropdown.Item>
+                                <NavDropdown.Item href="#action/3.2" onClick={() => Object.assign(this.props.graphs, Configuration.restoreConfiration())}>
+                                  Import à partir du navigateur
+                                </NavDropdown.Item>
                             </NavDropdown>
 
                             <NavDropdown title="Export" id="basic-nav-dropdown">
-                                <NavDropdown.Item href="#action/3.1"
-                                                  onClick={() => Configuration.exportConfiration(this.props.graphs)}>Export
-                                    dans un
-                                    fichier</NavDropdown.Item>
-                                <NavDropdown.Item href="#action/3.2"
-                                                  onClick={() => Configuration.saveConfiguration(this.props.graphs)}>Export
-                                    dans
-                                    le
-                                    navigateur</NavDropdown.Item>
+                                <NavDropdown.Item href="#action/3.1" onClick={this.props.onExport}>
+                                  Export dans un fichier
+                                  </NavDropdown.Item>
+                                <NavDropdown.Item href="#action/3.2" onClick={() => Configuration.saveConfiguration(this.props.graphs)}>
+                                  Export dans le navigateur
+                                </NavDropdown.Item>
                             </NavDropdown>
                         </Nav>
                     </Navbar.Collapse>
