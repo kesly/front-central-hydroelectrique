@@ -18,8 +18,7 @@ class AddGraphicModal extends React.Component {
             high: false,
             power: false,
             position: false,
-            debit: false,
-            checkSubmit: true,
+            debit: false
         }
     }
 
@@ -36,14 +35,13 @@ class AddGraphicModal extends React.Component {
     }
 
     createHydraulicItems = () => {
+        let items = [];
+        Object.keys(this.props.hydraulicsID).map((hydraulicID, index) => (
+            items.push(<option key={index} value={hydraulicID}>{hydraulicID}</option>)
+        ))
 
-      let items = [];
-      Object.keys(this.props.hydraulicsID).map((hydraulicID, index) => (
-          items.push(<option key={index} value={hydraulicID}>{hydraulicID}</option>)
-      ))
-
-      return items;
-    }
+        return items;
+      }
 
     handleChangeHydraulic = (event) => {
         this.setState({
@@ -52,68 +50,93 @@ class AddGraphicModal extends React.Component {
     }
 
     handleChangeTurbine = (event) => {
-      
-      this.setState({
-          turbineID: event.target.value,
-          checkSubmit: (this.state.sizeCheck >= 1 && this.state.hydraulicID!=='' && event.target.value!=='') ? false : true,
-      })
+        this.setState({
+            turbineID: event.target.value
+        })
     }
 
-    handleChangeHeight = () => {
-      let sizeCheck = this.state.high ? (this.state.sizeCheck-1) : (this.state.sizeCheck+1);
-      if(this.state.sizeCheck<2 || this.state.high){
-          this.setState({
-              high: !this.state.high,
-              attribute1: !this.state.high ? 'high' : '',
-              attribute2: (!this.state.high && this.state.attribute1!=='') ? 'high' : '',
-              sizeCheck: sizeCheck,
-              checkSubmit: (sizeCheck>=1 && this.state.hydraulicID!=='' && this.state.turbineID!=='') ? false : true,
-          })
-      }
+    handleChangeHeight = (event) => {
+      let attribute1 = this.state.attribute1 ? (
+        this.state.attribute1 !== "high" ? this.state.attribute1 : (
+          this.state.attribute2 ? this.state.attribute2 : ""
+        )
+      ) : (
+        !this.state.high ? "high" : ""
+      );
 
+      let attribute2 = (!this.state.high && this.state.attribute1) ? 'high' : '';
+
+        if(this.state.sizeCheck<2 || this.state.high){
+            this.setState({
+                high: !this.state.high,
+                attribute1,
+                attribute2,
+                sizeCheck: this.state.high ? (this.state.sizeCheck-1) : (this.state.sizeCheck+1),
+            })
+        }
     }
 
-    handleChangePosition = () => {
-      let sizeCheck = this.state.position ? (this.state.sizeCheck-1) : (this.state.sizeCheck+1);
-      if(this.state.sizeCheck<2 || this.state.position){
-          this.setState({
-              position: !this.state.position,
-              attribute1: !this.state.position ? 'position' : '',
-              attribute2: (!this.state.position && this.state.attribute1!=='') ? 'position' : '',
-              sizeCheck: sizeCheck,
-              checkSubmit: (sizeCheck>=1 && this.state.hydraulicID!=='' && this.state.turbineID!=='') ? false : true,
-          })
-      }
+    handleChangePosition = (event) => {
+        let attribute1 = this.state.attribute1 ? (
+          this.state.attribute1 !== "position" ? this.state.attribute1 : (
+            this.state.attribute2 ? this.state.attribute2 : ""
+          )
+        ) : (
+          !this.state.position ? "position" : ""
+        );
 
+        let attribute2 = (!this.state.position && this.state.attribute1) ? 'position' : '';
+
+        if(this.state.sizeCheck<2 || this.state.position){
+            this.setState({
+                position: !this.state.position,
+                attribute1,
+                attribute2,
+                sizeCheck: this.state.position ? (this.state.sizeCheck-1) : (this.state.sizeCheck+1),
+            })
+        }
     }
 
-    handleChangeEnergie = () => {
-      let sizeCheck = this.state.power ? (this.state.sizeCheck-1) : (this.state.sizeCheck+1);
-      if(this.state.sizeCheck<2 || this.state.power){
-          this.setState({
-              power: !this.state.power,
-              attribute1: !this.state.power ? 'power' : '',
-              attribute2: (!this.state.power && this.state.attribute1!=='') ? 'power' : '',
-              sizeCheck: sizeCheck,
-              checkSubmit: (sizeCheck>=1 && this.state.hydraulicID!=='' && this.state.turbineID!=='') ? false : true,
-          })
-      }
+    handleChangeEnergie = (event) => {
+        let attribute1 = this.state.attribute1 ? (
+          this.state.attribute1 !== "power" ? this.state.attribute1 : (
+            this.state.attribute2 ? this.state.attribute2 : ""
+          )
+        ) : (
+          !this.state.power ? "power" : ""
+        );
+
+        let attribute2 = (!this.state.power && this.state.attribute1) ? 'power' : '';
+
+        if(this.state.sizeCheck<2 || this.state.power){
+            this.setState({
+                power: !this.state.power,
+                attribute1,
+                attribute2,
+                sizeCheck: this.state.power ? (this.state.sizeCheck-1) : (this.state.sizeCheck+1),
+            })
+        }
     }
 
-    handleChangeDebit = () => {
-      let sizeCheck = this.state.debit ? (this.state.sizeCheck-1) : (this.state.sizeCheck+1);
-      if(this.state.sizeCheck<2 || this.state.debit){
-          this.setState({
-              debit: !this.state.debit,
-              attribute1: !this.state.debit ? 'debit' : '',
-              attribute2: (!this.state.debit && this.state.attribute1!=='') ? 'debit' : '',
-              sizeCheck: sizeCheck,
-              checkSubmit: (sizeCheck>=1 && this.state.hydraulicID!=='' && this.state.turbineID!=='') ? false : true,
-          })
-      }
-      this.setState({
-          debit:  this.refs.debit.checked
-      })
+    handleChangeDebit = (event) => {
+        let attribute1 = this.state.attribute1 ? (
+          this.state.attribute1 !== "debit" ? this.state.attribute1 : (
+            this.state.attribute2 ? this.state.attribute2 : ""
+          )
+        ) : (
+          !this.state.debit ? "debit" : ""
+        );
+
+        let attribute2 = (!this.state.debit && this.state.attribute1) ? 'debit' : '';
+
+        if(this.state.sizeCheck<2 || this.state.debit){
+            this.setState({
+                debit: !this.state.debit,
+                attribute1,
+                attribute2,
+                sizeCheck: this.state.debit ? (this.state.sizeCheck-1) : (this.state.sizeCheck+1),
+            })
+        }
     }
 
     handleShow = () => {
@@ -148,19 +171,19 @@ class AddGraphicModal extends React.Component {
               <Form onSubmit={this.handleSubmit}>
                 <Form.Group controlId="exampleForm.ControlSelect1">
                   <Form.Label>Centrales</Form.Label>
-                  <Form.Control as="select" onChange={this.handleChangeHydraulic} >
+                  <Form.Control as="select" onChange={this.handleChangeHydraulic}>
                     <option value=''>Choisissez une centrale</option>
                     {
                       Object.keys(this.props.hydraulicsID).map((hydraulicID, index) => {
-                          return <option key={index} value={hydraulicID} >{hydraulicID}</option>;
+                          return <option key={index} value={hydraulicID}>{hydraulicID}</option>;
                       })
                     }
                   </Form.Control>
                 </Form.Group>
                 <Form.Group controlId="exampleForm.ControlSelect1">
                   <Form.Label>Turbines</Form.Label>
-                  <Form.Control as="select"  onChange={this.handleChangeTurbine} >
-                    <option value=''>Choisissez une turbine</option>
+                  <Form.Control as="select"  onChange={this.handleChangeTurbine}>
+                    <option>Choisissez une turbine</option>
                     {this.createTurbinesItems()}
                   </Form.Control>
                 </Form.Group>
@@ -187,7 +210,7 @@ class AddGraphicModal extends React.Component {
               <Button variant="danger" onClick={this.cancel}>
                 Annuler
               </Button>
-              <Button type="submit" variant="primary" onClick={this.submit} disabled={this.state.checkSubmit}>
+              <Button type="submit" variant="primary" onClick={this.submit}>
                 Valider
               </Button>
             </Modal.Footer>

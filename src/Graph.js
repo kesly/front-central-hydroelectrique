@@ -135,7 +135,7 @@ class Graph extends React.Component{
     render() {
         const { data, hydraulicID, turbineID } = this.props;
         const { attribute1, attribute2 } = this.state;
-        console.log(this.getDataDebit());
+
         let graph;
         if (this.state.type === 'Scatter') {
             graph = <Scatter data={this.getDataDebit()} options={this.state.options}/>

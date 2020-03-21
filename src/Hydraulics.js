@@ -20,9 +20,7 @@ class Hydraulics extends React.Component {
         size: 0,
         accordions: [],
     };
-  }
-
-  
+}
 
   handleShow = () => {
     this.setState({ show: true });
@@ -41,13 +39,9 @@ class Hydraulics extends React.Component {
       });
   }
 
-  importConfiguration = () => {
-    
-  }
-
   handleDeleteAccordions = index =>{
     const accordions = this.state.accordions.filter(accordion => accordion.id!==index);
-    
+
     this.setState({
         accordions: accordions,
     });
@@ -65,7 +59,7 @@ class Hydraulics extends React.Component {
     return (
       <div className="main-Hydraulics">
         <Button variant="primary" className='btn' onClick={ () => this.handleShow() }>ADD HYDRAULIC</Button>
-        
+
           {
             Object.keys(graphs).map((hydraulicID, index) => {
               return (
