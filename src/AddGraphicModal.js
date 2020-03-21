@@ -18,7 +18,8 @@ class AddGraphicModal extends React.Component {
             high: false,
             power: false,
             position: false,
-            debit: false
+            debit: false,
+            enableSubmit: false
         }
     }
 
@@ -44,15 +45,17 @@ class AddGraphicModal extends React.Component {
       }
 
     handleChangeHydraulic = (event) => {
-        this.setState({
-            hydraulicID: event.target.value
-        })
+        this.setState(
+          { hydraulicID: event.target.value },
+          this.toggleEnableSubmit
+        );
     }
 
     handleChangeTurbine = (event) => {
-        this.setState({
-            turbineID: event.target.value
-        })
+        this.setState(
+          { turbineID: event.target.value },
+          this.toggleEnableSubmit
+        );
     }
 
     handleChangeHeight = (event) => {
@@ -67,12 +70,15 @@ class AddGraphicModal extends React.Component {
       let attribute2 = (!this.state.high && this.state.attribute1) ? 'high' : '';
 
         if(this.state.sizeCheck<2 || this.state.high){
-            this.setState({
+            this.setState(
+              {
                 high: !this.state.high,
                 attribute1,
                 attribute2,
-                sizeCheck: this.state.high ? (this.state.sizeCheck-1) : (this.state.sizeCheck+1),
-            })
+                sizeCheck: this.state.high ? (this.state.sizeCheck-1) : (this.state.sizeCheck+1)
+              },
+              this.toggleEnableSubmit
+            );
         }
     }
 
@@ -88,12 +94,15 @@ class AddGraphicModal extends React.Component {
         let attribute2 = (!this.state.position && this.state.attribute1) ? 'position' : '';
 
         if(this.state.sizeCheck<2 || this.state.position){
-            this.setState({
+            this.setState(
+              {
                 position: !this.state.position,
                 attribute1,
                 attribute2,
-                sizeCheck: this.state.position ? (this.state.sizeCheck-1) : (this.state.sizeCheck+1),
-            })
+                sizeCheck: this.state.position ? (this.state.sizeCheck-1) : (this.state.sizeCheck+1)
+              },
+              this.toggleEnableSubmit
+            );
         }
     }
 
@@ -109,12 +118,15 @@ class AddGraphicModal extends React.Component {
         let attribute2 = (!this.state.power && this.state.attribute1) ? 'power' : '';
 
         if(this.state.sizeCheck<2 || this.state.power){
-            this.setState({
+            this.setState(
+              {
                 power: !this.state.power,
                 attribute1,
                 attribute2,
-                sizeCheck: this.state.power ? (this.state.sizeCheck-1) : (this.state.sizeCheck+1),
-            })
+                sizeCheck: this.state.power ? (this.state.sizeCheck-1) : (this.state.sizeCheck+1)
+              },
+              this.toggleEnableSubmit
+            );
         }
     }
 
@@ -130,13 +142,24 @@ class AddGraphicModal extends React.Component {
         let attribute2 = (!this.state.debit && this.state.attribute1) ? 'debit' : '';
 
         if(this.state.sizeCheck<2 || this.state.debit){
-            this.setState({
+            this.setState(
+              {
                 debit: !this.state.debit,
                 attribute1,
                 attribute2,
-                sizeCheck: this.state.debit ? (this.state.sizeCheck-1) : (this.state.sizeCheck+1),
-            })
+                sizeCheck: this.state.debit ? (this.state.sizeCheck-1) : (this.state.sizeCheck+1)
+              },
+              this.toggleEnableSubmit
+            );
         }
+    }
+
+    toggleEnableSubmit = () => {
+        let { hydraulicID, turbineID, attribute1 } = this.state;
+
+        this.setState({
+          enableSubmit: (hydraulicID != "" && turbineID != "" && attribute1 != "")
+        });
     }
 
     handleShow = () => {
@@ -183,7 +206,7 @@ class AddGraphicModal extends React.Component {
                 <Form.Group controlId="exampleForm.ControlSelect1">
                   <Form.Label>Turbines</Form.Label>
                   <Form.Control as="select"  onChange={this.handleChangeTurbine}>
-                    <option>Choisissez une turbine</option>
+                    <option value=''>Choisissez une turbine</option>
                     {this.createTurbinesItems()}
                   </Form.Control>
                 </Form.Group>
@@ -210,7 +233,7 @@ class AddGraphicModal extends React.Component {
               <Button variant="danger" onClick={this.cancel}>
                 Annuler
               </Button>
-              <Button type="submit" variant="primary" onClick={this.submit}>
+              <Button type="submit" variant="primary" onClick={this.submit} disabled={!this.state.enableSubmit}>
                 Valider
               </Button>
             </Modal.Footer>
