@@ -8,8 +8,6 @@ const attributeInitialState = {
 }
 
 export default function dataReducer(state = {}, action) {
-  console.log("==================================================================================")
-  console.log("DataReducer", action, state)
 
   switch (action.type) {
 

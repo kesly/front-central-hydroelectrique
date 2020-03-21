@@ -4,7 +4,6 @@ import {
 } from './GraphActions';
 
 export default function graphReducer(state = {}, action) {
-  console.log("GraphReducer", action, state)
 
   let graphParameters = action.attribute2 ? {
     turbineID: action.turbineID,

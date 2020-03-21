@@ -5,6 +5,8 @@ import PropTypes from 'prop-types';
 import { TURBINES_COMMON_PROPERTIES, delGraph } from './Stores/GraphActions';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button} from 'react-bootstrap'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTrash } from '@fortawesome/free-solid-svg-icons'
 
 class Graph extends React.Component{
 
@@ -158,7 +160,7 @@ class Graph extends React.Component{
     render() {
         const { hydraulicID, turbineID } = this.props;
         const { attribute1, attribute2 } = this.state;
-        console.log(this.getDataDebit());
+        
         let graph;
         if (this.state.type === 'Scatter') {
             graph = <Scatter data={this.getDataDebit()} options={this.state.options}/>
@@ -167,12 +169,12 @@ class Graph extends React.Component{
         }
 
         return(
-            <div>
-                {graph}
-                <Button variant="danger" onClick={() => this.delGraph(hydraulicID, turbineID, attribute1.value, (attribute2 ? attribute2.value : null))}>
-                    Supprimer
-                </Button>
-            </div>
+          <div>
+            <Button className="absolute-top-right" variant="danger" onClick={() => this.delGraph(hydraulicID, turbineID, attribute1.value, (attribute2 ? attribute2.value : null))}>
+              <FontAwesomeIcon icon={ faTrash }/>
+            </Button>
+            {graph}
+          </div>
         )
     }
 }

@@ -2,7 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import  Accordion  from './Accordion';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {Button} from 'react-bootstrap';
+import { Container, Row, Col, Button } from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import AddGraphicModal from './AddGraphicModal';
 import Graph from './Graph';
 import { addGraph } from './Stores/GraphActions';
@@ -53,27 +55,58 @@ class Hydraulics extends React.Component {
     this.addGraph(graphs, data, dataFetcher, hydraulicID, turbineID, attribute1, attribute2);
   }
 
+  displayGraphsContainer = (graphs, hydraulicID) => {
+    let rows = [];
+
+    graphs[hydraulicID].forEach((graphParameters, index) => {
+      if (!(index%3)) {
+        rows.push([]);
+      }
+
+      rows[Math.trunc(index/3)].push(graphParameters);
+    });
+
+    return (
+      <Container fluid>
+        {
+          rows.map((row, index) => {
+            return (
+              <Row key={index}>
+                {
+                  rows[index].map((graphParameters, index) => {
+                    return (
+                      <Col key={ index } lg={6} xl={4}>
+                        <Graph hydraulicID={ hydraulicID }
+                               turbineID={ graphParameters.turbineID }
+                               attribute1={ graphParameters.attribute1 }
+                               attribute2={ graphParameters.attribute2 }/>
+                      </Col>
+                    );
+                  })
+                }
+              </Row>
+            );
+          })
+        }
+      </Container>
+    );
+  }
+
   render() {
     const { graphs } = this.props;
 
     return (
       <div className="main-Hydraulics">
-        <Button variant="primary" className='btn' onClick={ () => this.handleShow() }>ADD HYDRAULIC</Button>
+        <Button variant="primary" className="sticky-top-left" onClick={ () => this.handleShow() }>
+          <FontAwesomeIcon icon={ faPlus } className="mr-2"/>
+          Graphique
+        </Button>
 
           {
             Object.keys(graphs).map((hydraulicID, index) => {
               return (
-                <Accordion key={ index } hydraulic={ hydraulicID }>
-                  {
-                    graphs[hydraulicID].map((graphParameters, index) => {
-                      return <Graph key={ index }
-                                    hydraulicID={ hydraulicID }
-                                    turbineID={ graphParameters.turbineID }
-                                    attribute1={ graphParameters.attribute1 }
-                                    attribute2={ graphParameters.attribute2 }
-                      />;
-                    })
-                  }
+                <Accordion key={ index } hydraulicID={ hydraulicID } className="mt-6">
+                  { this.displayGraphsContainer(graphs, hydraulicID) }
                 </Accordion>
               );
             })
