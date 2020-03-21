@@ -1,7 +1,7 @@
 import React from 'react'
 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './Accordion.css'
+import './App.css'
 
 class Accordion extends React.Component {
 
@@ -9,10 +9,7 @@ class Accordion extends React.Component {
         super(props);
 
         this.state = {
-            folded : true,
-            name: props.hydraulic,
-            graph: props.graph,
-            id: props.index,
+            folded : "show",
             size: 0,
             turbineList: [],
         };
@@ -20,22 +17,22 @@ class Accordion extends React.Component {
 
     clicAccordion = () => {
         this.setState({
-            folded: !this.state.folded,
+            folded: !this.state.folded ? "show" : "",
         })
     }
 
     render() {
         return (
-          <div className="accordion" id="accordionExample">
+          <div className={ `accordion ${this.props.className}` }>
             <div className="card">
-              <div className="card-header" id="headingOne">
+              <div className="card-header">
                 <h2 className="mb-0">
-                  <button onClick={ this.clicAccordion } className="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                    { this.state.name }
+                  <button className="btn btn-link" type="button" onClick={this.clicAccordion}>
+                    { this.props.hydraulicID }
                   </button>
                 </h2>
               </div>
-              <div id="collapseOne" className="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+              <div className={ `collapse ${this.state.folded}` }>
                 <div className="card-body">
                     { this.props.children }
                 </div>

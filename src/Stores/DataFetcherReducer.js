@@ -4,7 +4,6 @@ import {
 } from './DataFetcherActions';
 
 export default function dataFetcherReducer(state = {}, action) {
-  console.log("DataFetcherReducer", action, state)
 
   switch (action.type) {
 

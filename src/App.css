@@ -36,3 +36,25 @@
     transform: rotate(360deg);
   }
 }
+
+.sticky-top-left {
+  z-index: 1020;
+  position: fixed;
+  top: 75px;
+  left: 15px;
+}
+
+.absolute-top-right {
+  position: absolute;
+  top: 40px;
+  right: 30px;
+}
+
+.mt-6 {
+    margin-top: 75px;
+}
+
+.mainAccordion {
+    margin: 5px 5px 10px 5px;
+    border: 1px solid black ;
+}
