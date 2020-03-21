@@ -62,45 +62,68 @@ class Graph extends React.Component{
         const {attribute1, attribute2} = this.state;
 
         if (this.props.attribute2) {
+            let dataKeys = Object.keys(data[hydraulicID][attribute1.turbineID][attribute1.value].data);
             let twoData = [];
-            for (const timestamp in data[hydraulicID][attribute1.turbineID][attribute1.value].data) {
-                twoData.push({x: data[hydraulicID][attribute1.turbineID][attribute1.value].data[timestamp],
-                    y:data[hydraulicID][attribute2.turbineID][attribute2.value].data[timestamp]})
-            }
-            return {
-                datasets: [{
-                    label: `Nuage des points: ${attribute2.value}/${attribute1.value}`,
-                    data: twoData
-                }]
-            }
-        } else {
+            let pointBackgroundColorArray = [];
+
+            dataKeys.forEach((timestamp, index) => {
+              twoData.push({
+                x: data[hydraulicID][attribute1.turbineID][attribute1.value].data[timestamp],
+                y:data[hydraulicID][attribute2.turbineID][attribute2.value].data[timestamp]
+              });
+
+              if (index === (dataKeys.length -1)) {
+                pointBackgroundColorArray.push("red");
+              }
+              else {
+                pointBackgroundColorArray.push("rgba(75,192,192,1)");
+              }
+            });
+
+            // for (const timestamp in data[hydraulicID][attribute1.turbineID][attribute1.value].data) {
+            //   twoData.push({
+            //     x: data[hydraulicID][attribute1.turbineID][attribute1.value].data[timestamp],
+            //     y:data[hydraulicID][attribute2.turbineID][attribute2.value].data[timestamp]
+            //   });
+            // }
 
             return {
-                labels: Object.keys(data).length?[...Object.keys(data[hydraulicID][attribute1.turbineID][attribute1.value].data)]: [],
-                datasets: [
-                    {
-                        label: `${hydraulicID} - ${turbineID} - ${attribute1.value}` ,
-                        fill: false,
-                        lineTension: 0.1,
-                        backgroundColor: 'rgba(75,192,192,0.4)',
-                        borderColor: 'rgba(75,192,192,1)',
-                        borderCapStyle: 'butt',
-                        borderDash: [],
-                        borderDashOffset: 0.0,
-                        borderJoinStyle: 'miter',
-                        pointBorderColor: 'rgba(75,192,192,1)',
-                        pointBackgroundColor: '#fff',
-                        pointBorderWidth: 1,
-                        pointHoverRadius: 5,
-                        pointHoverBackgroundColor: 'rgba(75,192,192,1)',
-                        pointHoverBorderColor: 'rgba(220,220,220,1)',
-                        pointHoverBorderWidth: 2,
-                        pointRadius: 1,
-                        pointHitRadius: 10,
-                        data: Object.keys(data).length?[...Object.values(data[hydraulicID][attribute1.turbineID][attribute1.value].data)]: []
-                    }
-                ]
-            };
+              datasets: [{
+                label: `Nuage des points: ${attribute2.value}/${attribute1.value}`,
+                pointRadius: 5,
+                pointBackgroundColor: pointBackgroundColorArray,
+                data: twoData
+              }]
+            }
+        }
+
+        else {
+          return {
+            labels: Object.keys(data).length?[...Object.keys(data[hydraulicID][attribute1.turbineID][attribute1.value].data)]: [],
+            datasets: [
+              {
+                label: `${hydraulicID} - ${turbineID} - ${attribute1.value}` ,
+                fill: false,
+                lineTension: 0.1,
+                backgroundColor: 'rgba(75,192,192,0.4)',
+                borderColor: 'rgba(75,192,192,1)',
+                borderCapStyle: 'butt',
+                borderDash: [],
+                borderDashOffset: 0.0,
+                borderJoinStyle: 'miter',
+                pointBorderColor: 'rgba(75,192,192,1)',
+                pointBackgroundColor: '#fff',
+                pointBorderWidth: 1,
+                pointHoverRadius: 5,
+                pointHoverBackgroundColor: 'rgba(75,192,192,1)',
+                pointHoverBorderColor: 'rgba(220,220,220,1)',
+                pointHoverBorderWidth: 2,
+                pointRadius: 1,
+                pointHitRadius: 10,
+                data: Object.keys(data).length?[...Object.values(data[hydraulicID][attribute1.turbineID][attribute1.value].data)]: []
+              }
+            ]
+          };
         }
     }
 
@@ -133,9 +156,9 @@ class Graph extends React.Component{
     }
 
     render() {
-        const { data, hydraulicID, turbineID } = this.props;
+        const { hydraulicID, turbineID } = this.props;
         const { attribute1, attribute2 } = this.state;
-
+        console.log(this.getDataDebit());
         let graph;
         if (this.state.type === 'Scatter') {
             graph = <Scatter data={this.getDataDebit()} options={this.state.options}/>

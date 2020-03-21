@@ -26,7 +26,7 @@ class AddGraphicModal extends React.Component {
     createTurbinesItems(){
       let items = [];
 
-      if(this.state.hydraulicID!== ''){
+      if(this.state.hydraulicID !== ''){
         this.props.hydraulicsID[this.state.hydraulicID].map((turbineList, index) => (
           items.push(<option key={index} value={turbineList}>{turbineList}</option>)
         ))
@@ -158,7 +158,7 @@ class AddGraphicModal extends React.Component {
         let { hydraulicID, turbineID, attribute1 } = this.state;
 
         this.setState({
-          enableSubmit: (hydraulicID != "" && turbineID != "" && attribute1 != "")
+          enableSubmit: (hydraulicID !== "" && turbineID !== "" && attribute1 !== "")
         });
     }
 
