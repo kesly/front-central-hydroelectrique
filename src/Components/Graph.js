@@ -1,9 +1,10 @@
 import React from "react";
-import { Scatter, Line } from 'react-chartjs-2';
+
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
-import { TURBINES_COMMON_PROPERTIES, delGraph } from './Stores/GraphActions';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import { Scatter, Line } from 'react-chartjs-2';
+
+import { TURBINES_COMMON_PROPERTIES, delGraph } from '../Stores/GraphActions';
+
 import { Button} from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
@@ -15,53 +16,31 @@ class Graph extends React.Component{
       this.props.dispatch(delGraph(graphs, dataFetcher, hydraulicID, turbineID, attribute1, attribute2));
     }
 
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            options: this.configOptions(),
-            type: this.getType(),
-            attribute1: {
-                turbineID: TURBINES_COMMON_PROPERTIES.includes(this.props.attribute1) ? "all" : this.props.turbineID,
-                value: this.props.attribute1
-            }
-        };
-
-        if (this.props.attribute2) {
-            this.state = {
-                ...this.state,
-                attribute2: {
-                    turbineID: TURBINES_COMMON_PROPERTIES.includes(this.props.attribute2) ? "all" : this.props.turbineID,
-                    value: this.props.attribute2
-                }
-            }
-        }
-
-    }
-
-
-    getDataFromStore(){
+    getAttributeObjectFromProps() {
       return {
-            datasets: [{
-                label: 'Scatter Dataset',
-                data: [{
-                    x: -10,
-                    y: 0
-                }, {
-                    x: 0,
-                    y: 10
-                }, {
-                    x: 10,
-                    y: 5
-                }]
-            }]
-        };
+        attribute1: {
+            turbineID: TURBINES_COMMON_PROPERTIES.includes(this.props.attribute1) ? "all" : this.props.turbineID,
+            value: this.props.attribute1
+        },
+        attribute2: (
+          this.props.attribute2 ? {
+            turbineID: TURBINES_COMMON_PROPERTIES.includes(this.props.attribute2) ? "all" : this.props.turbineID,
+            value: this.props.attribute2
+          } : null
+        )
+      }
     }
 
-    getDataDebit(){
+    getDataDebit() {
+        const { data, hydraulicID, turbineID } = this.props;
+        const { attribute1, attribute2 } = this.getAttributeObjectFromProps();
 
-        const {data, hydraulicID, turbineID} = this.props;
-        const {attribute1, attribute2} = this.state;
+        let attributeForTitle = {
+          debit: "Débit",
+          power: "Énergie produite",
+          high: "Hauteur de chute",
+          position: "Position des pâles"
+        };
 
         if(Object.keys(data).length <1){
             return [];
@@ -86,16 +65,9 @@ class Graph extends React.Component{
               }
             });
 
-            // for (const timestamp in data[hydraulicID][attribute1.turbineID][attribute1.value].data) {
-            //   twoData.push({
-            //     x: data[hydraulicID][attribute1.turbineID][attribute1.value].data[timestamp],
-            //     y:data[hydraulicID][attribute2.turbineID][attribute2.value].data[timestamp]
-            //   });
-            // }
-
             return {
               datasets: [{
-                label: `Nuage des points: ${attribute2.value}/${attribute1.value}`,
+                label: `${hydraulicID} - ${turbineID} - ${attributeForTitle[attribute2.value]} / ${attributeForTitle[attribute1.value]}`,
                 pointRadius: 5,
                 pointBackgroundColor: pointBackgroundColorArray,
                 data: twoData
@@ -108,7 +80,7 @@ class Graph extends React.Component{
             labels: Object.keys(data).length?[...Object.keys(data[hydraulicID][attribute1.turbineID][attribute1.value].data)]: [],
             datasets: [
               {
-                label: `${hydraulicID} - ${turbineID} - ${attribute1.value}` ,
+                label: `${hydraulicID} - ${turbineID} - ${attributeForTitle[attribute1.value]}` ,
                 fill: false,
                 lineTension: 0.1,
                 backgroundColor: 'rgba(75,192,192,0.4)',
@@ -133,42 +105,14 @@ class Graph extends React.Component{
         }
     }
 
-    getType(){
-        return (this.props.attribute2)?'Scatter':'Line';
-    }
-
-    configOptions(){
-
-    }
-
-
-    static defaultProps = {
-        title: {},
-        type: 'Line'
-    };
-
-    static propTypes = {
-        //title: PropTypes.array.isRequired,
-        turbineID: PropTypes.string.isRequired,
-    };
-
-
-    getData2(){
-        return [20, 10, 30];
-    }
-
-    configGraph(){
-
-    }
-
     render() {
         const { hydraulicID, turbineID } = this.props;
-        const { attribute1, attribute2 } = this.state;
-        
+        const { attribute1, attribute2 } = this.getAttributeObjectFromProps();
+
         let graph;
-        if (this.state.type === 'Scatter') {
-            graph = <Scatter data={this.getDataDebit()} options={this.state.options}/>
-        } else if (this.state.type === 'Line'){
+        if (attribute2) {
+            graph = <Scatter data={this.getDataDebit()}/>
+        } else {
             graph = <Line data={this.getDataDebit()}/>;
         }
 
@@ -177,7 +121,8 @@ class Graph extends React.Component{
             <Button className="absolute-top-right" variant="danger" onClick={() => this.delGraph(hydraulicID, turbineID, attribute1.value, (attribute2 ? attribute2.value : null))}>
               <FontAwesomeIcon icon={ faTrash }/>
             </Button>
-            {graph}
+
+            { graph }
           </div>
         )
     }

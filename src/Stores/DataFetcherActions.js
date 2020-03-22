@@ -108,12 +108,42 @@ export function addGraphToDataAndFetcher(types, obj, hydraulicID, turbineID, att
   };
 }
 
-export function delGraphFromFetcher(dataFetcher, hydraulicID, turbineID, attribute1, attribute2 = null) {
+export function delGraphFromFetcher(graphs, dataFetcher, hydraulicID, turbineID, attribute1, attribute2 = null) {
   return (dispatch) => {
+    let dataInOtherGraphs = [];
+    let thisGraphParameters = {
+      turbineID,
+      attribute1
+    }
+
+    if (attribute2) {
+      thisGraphParameters.attribute2 = attribute2;
+    }
+
     // Si les attributs sont des attributs paratgés
     if (TURBINES_COMMON_PROPERTIES.includes(attribute1) && (!attribute2 || TURBINES_COMMON_PROPERTIES.includes(attribute2))) {
-      // Si ces attributs sont les seuls dans les attributs partagés
-      if (dataFetcher[hydraulicID].all.length === 1 || (attribute2 && dataFetcher[hydraulicID].all.length === 2)) {
+      // Regarder si ces attributs sont utilisés dans d'autres graphs de la centrale
+      Object.values(graphs[hydraulicID]).forEach((graphParameters, index) => {
+        let graphParametersAttributesArray = [
+          graphParameters.attribute1,
+          graphParameters.attribute2
+        ];
+
+        // S'il ne s'agit pas du graphique actuel
+        if (!ObjectAreEquals(graphParameters, thisGraphParameters)) {
+          // Regarder l'attribut attribute1
+          if (!dataInOtherGraphs.includes(attribute1) && graphParametersAttributesArray.includes(attribute1)) {
+            dataInOtherGraphs.push(attribute1);
+          }
+          // Regarder l'attribut attribute2
+          if (!dataInOtherGraphs.includes(attribute2) && graphParametersAttributesArray.includes(attribute2)) {
+            dataInOtherGraphs.push(attribute2);
+          }
+        }
+      });
+
+      // Si ces attributs sont les seuls dans les attributs partagés et s'ils ne sont pas utilisés dans d'autres graphs de la centrale
+      if ((dataFetcher[hydraulicID].all.length === 1 || (attribute2 && dataFetcher[hydraulicID].all.length === 2)) && !dataInOtherGraphs.length) {
         // Si la turbine est la seule dans la centrale
         if (Object.keys(dataFetcher[hydraulicID]).length === 1) {
           // Supprimer la centrale
@@ -125,10 +155,14 @@ export function delGraphFromFetcher(dataFetcher, hydraulicID, turbineID, attribu
         }
       // Si ces attributs ne sont pas les seuls dans les attributs partagés
       } else {
-        // Supprimer l'attribut partagé attribute1
-        dispatch(delAttribute(hydraulicID, "all", attribute1));
-        // Supprimer l'attribut partagé attribute2 s'il n'est pas nul
-        if (attribute2) {
+        // Si l'attribut attribute1 n'est pas utilisé dans un autre graph de la centrale
+        if (!dataInOtherGraphs.includes(attribute1)) {
+          // Supprimer l'attribut partagé attribute1
+          dispatch(delAttribute(hydraulicID, "all", attribute1));
+        }
+        // Si l'attribut attribute2 n'est pas utilisé dans un autre graph de la centrale et s'il existe
+        if (attribute2 && !dataInOtherGraphs.includes(attribute2)) {
+          // Supprimer l'attribut partagé attribute2
           dispatch(delAttribute(hydraulicID, "all", attribute2));
         }
       }
@@ -136,8 +170,28 @@ export function delGraphFromFetcher(dataFetcher, hydraulicID, turbineID, attribu
 
     // Si les attributs sont des attributs non partagés
     else if (!TURBINES_COMMON_PROPERTIES.includes(attribute1) && (!attribute2 || !TURBINES_COMMON_PROPERTIES.includes(attribute2))) {
-      // Si ces attributs sont les seuls dans les attributs non partagés
-      if (dataFetcher[hydraulicID][turbineID].length === 1 || (attribute2 && dataFetcher[hydraulicID][turbineID].length === 2)) {
+      // Regarder si ces attributs sont utilisés dans d'autres graphs de la turbine
+      Object.values(graphs[hydraulicID]).forEach((graphParameters, index) => {
+        // Si la turbine concernée est la même et qu'il ne s'agit pas du graphique actuel
+        if (turbineID === graphParameters.turbineID && !ObjectAreEquals(graphParameters, thisGraphParameters)) {
+          let graphParametersAttributesArray = [
+            graphParameters.attribute1,
+            graphParameters.attribute2
+          ];
+
+          // Regarder l'attribut attribute1
+          if (!dataInOtherGraphs.includes(attribute1) && graphParametersAttributesArray.includes(attribute1)) {
+            dataInOtherGraphs.push(attribute1);
+          }
+          // Regarder l'attribut attribute2
+          if (!dataInOtherGraphs.includes(attribute2) && graphParametersAttributesArray.includes(attribute2)) {
+            dataInOtherGraphs.push(attribute2);
+          }
+        }
+      });
+
+      // Si ces attributs sont les seuls dans les attributs non partagés et s'ils ne sont pas utilisés dans d'autres graphs de la turbine
+      if ((dataFetcher[hydraulicID][turbineID].length === 1 || (attribute2 && dataFetcher[hydraulicID][turbineID].length === 2)) && !dataInOtherGraphs.length) {
           // Si la turbine est la seule dans la centrale
           if (Object.keys(dataFetcher[hydraulicID]).length === 1) {
             // Supprimer la centrale
@@ -149,10 +203,14 @@ export function delGraphFromFetcher(dataFetcher, hydraulicID, turbineID, attribu
           }
       // Si ces attributs ne sont pas les seuls dans les attributs partagés
       } else {
-        // Supprimer l'attribut non partagé attribute1
-        dispatch(delAttribute(hydraulicID, turbineID, attribute1));
-        // Supprimer l'attribut non partagé attribute2 s'il n'est pas nul
-        if (attribute2) {
+        // Si l'attribut attribute1 n'est pas utilisé dans un autre graph de la centrale
+        if (!dataInOtherGraphs.includes(attribute1)) {
+          // Supprimer l'attribut non partagé attribute1
+          dispatch(delAttribute(hydraulicID, turbineID, attribute1));
+        }
+        // Si l'attribut attribute2 n'est pas utilisé dans un autre graph de la centrale et s'il existe
+        if (attribute2 && !dataInOtherGraphs.includes(attribute2)) {
+          // Supprimer l'attribut non partagé attribute2
           dispatch(delAttribute(hydraulicID, turbineID, attribute2));
         }
       }
@@ -160,8 +218,35 @@ export function delGraphFromFetcher(dataFetcher, hydraulicID, turbineID, attribu
 
     // Si un des attributs est un attribut partagé et l'autre non
     else {
-      // Si ces attributs sont les seuls dans les attributs paratgés et non partagés
-      if (dataFetcher[hydraulicID].all.length + dataFetcher[hydraulicID][turbineID].length === 1 || (attribute2 && dataFetcher[hydraulicID].all.length + dataFetcher[hydraulicID][turbineID].length === 2)) {
+      // Regarder si ces attributs sont utilisés dans d'autres graphs de la centrale pour l'attribut partagé ou de la turbine pour l'attribut non partagé
+      Object.values(graphs[hydraulicID]).forEach((graphParameters, index) => {
+        // Si la turbine concernée est la même
+        let graphParametersAttributesArray = [
+          graphParameters.attribute1,
+          graphParameters.attribute2
+        ];
+
+        // S'il ne s'agit pas du graphique actuel
+        if (!ObjectAreEquals(graphParameters, thisGraphParameters)) {
+          // Regarder l'attribut attribute1
+          if (!dataInOtherGraphs.includes(attribute1) && graphParametersAttributesArray.includes(attribute1)) {
+            // Si l'attribut attribute1 est partagé ou s'il est dans la bonne turbine
+            if (turbineID === graphParameters.turbineID || TURBINES_COMMON_PROPERTIES.includes(attribute1)) {
+              dataInOtherGraphs.push(attribute1);
+            }
+          }
+          // Regarder l'attribut attribute2
+          if (!dataInOtherGraphs.includes(attribute2) && graphParametersAttributesArray.includes(attribute2)) {
+            // Si l'attribut attribute2 est partagé ou s'il est dans la bonne turbine
+            if (turbineID === graphParameters.turbineID || TURBINES_COMMON_PROPERTIES.includes(attribute1)) {
+              dataInOtherGraphs.push(attribute2);
+            }
+          }
+        }
+      });
+
+      // Si ces attributs sont les seuls dans les attributs paratgés et non partagés et s'ils ne sont pas utilisés dans d'autres graphs de la centrale pour l'attribut partagé ou de la turbine pour l'attribut non partagé
+      if ((dataFetcher[hydraulicID].all.length + dataFetcher[hydraulicID][turbineID].length === 1 || (attribute2 && dataFetcher[hydraulicID].all.length + dataFetcher[hydraulicID][turbineID].length === 2)) && !dataInOtherGraphs.length) {
         // Si la turbine est seule
         if (Object.keys(dataFetcher[hydraulicID]).length === 2) {
           // Supprimer la centrale
@@ -183,14 +268,36 @@ export function delGraphFromFetcher(dataFetcher, hydraulicID, turbineID, attribu
           }
         // Si attribute1 n'est pas un attribut paratgé
         } else {
-          // Supprimer l'attribut non partagé attribute1
-          dispatch(delAttribute(hydraulicID, turbineID, attribute1));
-          // Supprimer l'attribut partagé attribute2 s'il n'est pas nul
-          if (attribute2) {
+          // Si l'attribut attribute1 n'est pas utilisé dans un autre graph de la centrale
+          if (!dataInOtherGraphs.includes(attribute1)) {
+            // Supprimer l'attribut non partagé attribute1
+            dispatch(delAttribute(hydraulicID, turbineID, attribute1));
+          }
+          // Si l'attribut attribute2 n'est pas utilisé dans un autre graph de la centrale et s'il existe
+          if (attribute2 && !dataInOtherGraphs.includes(attribute2)) {
+            // Supprimer l'attribut partagé attribute2
             dispatch(delAttribute(hydraulicID, "all", attribute2));
           }
         }
       }
     }
   };
+}
+
+function ObjectAreEquals(obj1, obj2) {
+  if (Object.keys(obj1).length !== Object.keys(obj2).length) {
+    return false;
+  }
+
+  for (const [property, value] of Object.entries(obj1)) {
+    if (!obj2.hasOwnProperty(property)) {
+      return false;
+    }
+
+    if (value !== obj2[property]) {
+      return false;
+    }
+  }
+
+  return true;
 }

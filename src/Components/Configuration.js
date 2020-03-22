@@ -1,8 +1,10 @@
  import React from 'react';
- import { saveAs } from 'file-saver';
+
  import { connect } from "react-redux";
- import NavBar from './Components/NavBar'
- import { addGraph, delGraph } from './Stores/GraphActions';
+ import { saveAs } from 'file-saver';
+
+ import { addGraph, delGraph } from '../Stores/GraphActions';
+ import NavBar from './NavBar'
 
 const GRAPH_KEY = "graphs";
 
@@ -16,10 +18,6 @@ class Configuration extends React.Component {
     delGraph = (hydraulicID, turbineID, attribute1, attribute2 = null) => {
       let { graphs, dataFetcher } = this.props;
       this.props.dispatch(delGraph(graphs, dataFetcher, hydraulicID, turbineID, attribute1, attribute2));
-    }
-
-    constructor(props) {
-        super(props);
     }
 
     static saveConfiguration = (graphs) => {

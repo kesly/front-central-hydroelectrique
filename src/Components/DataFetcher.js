@@ -1,11 +1,11 @@
 import React from 'react';
+
 import { connect } from 'react-redux';
-import { saveAs } from 'file-saver';
 
 import { fetchCatalog } from '../Stores/CatalogActions';
 import { fetchData } from '../Stores/DataActions';
 
-class AppDiv extends React.Component {
+class DataFetcher extends React.Component {
 
   fetchCatalog = () => { this.props.dispatch(fetchCatalog()); }
 
@@ -34,11 +34,7 @@ class AppDiv extends React.Component {
   }
 
   render() {
-    return (
-      <div className="App">
-        { this.props.children }
-      </div>
-    );
+    return null;
   }
 
 }
@@ -48,4 +44,4 @@ const mapStateToProps = (state) => ({
   dataFetcher: state.dataFetcher
 });
 
-export default connect(mapStateToProps)(AppDiv);
+export default connect(mapStateToProps)(DataFetcher);

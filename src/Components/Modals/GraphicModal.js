@@ -1,9 +1,10 @@
 import React from 'react';
-import {Modal, Button, Form} from 'react-bootstrap'
-import {connect} from 'react-redux';
 
-class AddGraphicModal extends React.Component {
+import { connect } from 'react-redux';
 
+import { Modal, Button, Form } from 'react-bootstrap'
+
+class GraphicModal extends React.Component {
 
     constructor(props){
         super(props);
@@ -186,8 +187,8 @@ class AddGraphicModal extends React.Component {
 
     render() {
         return (
-            <Modal show={this.state.show} onHide={this.handleClose}>
-            <Modal.Header >
+            <Modal show={this.state.show} onHide={this.cancel}>
+            <Modal.Header closeButton>
               <Modal.Title>Parametrage du graphique</Modal.Title>
             </Modal.Header>
             <Modal.Body>
@@ -210,15 +211,15 @@ class AddGraphicModal extends React.Component {
                     {this.createTurbinesItems()}
                   </Form.Control>
                 </Form.Group>
+                  <Form.Label>Données</Form.Label>
                   <Form.Row>
                     <Form.Group className="check-box-param">
-
                       <div key={`inline-checkbox`} className="mb-2">
                         <Form.Check label="Hauteur de chute" ref='high' value={this.state.high} onChange={this.handleChangeHeight} disabled={this.state.sizeCheck>=2 && !this.state.high}/>
                         <Form.Check label="Position des pâles" ref='position' value={this.state.position} onChange={this.handleChangePosition} disabled={this.state.sizeCheck>=2 && !this.state.position}/>
-
                       </div>
                     </Form.Group>
+
                     <Form.Group className="check-box-param">
                       <div key={`inline-checkbox`} className="mb-2">
                         <Form.Check label="Débit" ref='debit'  value={this.state.debit} onChange={this.handleChangeDebit} disabled={this.state.sizeCheck>=2 && !this.state.debit}/>
@@ -226,7 +227,6 @@ class AddGraphicModal extends React.Component {
                       </div>
                     </Form.Group>
                   </Form.Row>
-
               </Form>
             </Modal.Body>
             <Modal.Footer>
@@ -249,4 +249,4 @@ const mapStateToProps = (state) => ({
   error: state.catalog.error
 });
 
-export default connect(mapStateToProps)(AddGraphicModal);
+export default connect(mapStateToProps)(GraphicModal);

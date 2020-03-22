@@ -1,9 +1,6 @@
 import React from 'react'
 
-import 'bootstrap/dist/css/bootstrap.min.css';
-import './App.css'
-
-class Accordion extends React.Component {
+class AccordionItem extends React.Component {
 
     constructor(props) {
         super(props);
@@ -45,4 +42,4 @@ class Accordion extends React.Component {
 }
 
 
-export default Accordion;
+export default AccordionItem;

@@ -1,15 +1,17 @@
 import React from 'react';
+
 import { connect } from 'react-redux';
-import  Accordion  from './Accordion';
-import 'bootstrap/dist/css/bootstrap.min.css';
+
+import { addGraph } from '../Stores/GraphActions';
+import Graph from './Graph';
+import  AccordionItem  from './AccordionItem';
+import GraphicModal from './Modals/GraphicModal';
+
 import { Container, Row, Col, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
-import AddGraphicModal from './AddGraphicModal';
-import Graph from './Graph';
-import { addGraph } from './Stores/GraphActions';
 
-class Hydraulics extends React.Component {
+class AccordionWarpper extends React.Component {
 
   addGraph = (graphs, data, dataFetcher, hydraulicID, turbineID, attribute1, attribute2 = null) => {
     this.props.dispatch(addGraph(graphs, data, dataFetcher, hydraulicID, turbineID, attribute1, attribute2));
@@ -105,17 +107,17 @@ class Hydraulics extends React.Component {
           {
             Object.keys(graphs).map((hydraulicID, index) => {
               return (
-                <Accordion key={ index } hydraulicID={ hydraulicID } className="mt-6">
+                <AccordionItem key={ index } hydraulicID={ hydraulicID } className="mt-6">
                   { this.displayGraphsContainer(graphs, hydraulicID) }
-                </Accordion>
+                </AccordionItem>
               );
             })
           }
 
           {
-            this.state.show && <AddGraphicModal show={this.state.show}
-                                                onSubmit={this.handleSubmit}
-                                                onClose={this.handleClose}
+            this.state.show && <GraphicModal show={this.state.show}
+                                             onSubmit={this.handleSubmit}
+                                             onClose={this.handleClose}
             />
           }
       </div>
@@ -133,4 +135,4 @@ const mapStateToProps = (state) => ({
   error: state.catalog.error,
 });
 
-export default connect(mapStateToProps)(Hydraulics);
+export default connect(mapStateToProps)(AccordionWarpper);

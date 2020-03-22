@@ -63,7 +63,7 @@ export function addGraph(graphs, data, dataFetcher, hydraulicID, turbineID, attr
 
 export function delGraph(graphs, dataFetcher, hydraulicID, turbineID, attribute1, attribute2 = null) {
   return (dispatch) => {
-    dispatch(delGraphFromFetcher(dataFetcher, hydraulicID, turbineID, attribute1, attribute2));
+    dispatch(delGraphFromFetcher(graphs, dataFetcher, hydraulicID, turbineID, attribute1, attribute2));
     dispatch(delGraphFromGraph(graphs, hydraulicID, turbineID, attribute1, attribute2));
   };
 }
